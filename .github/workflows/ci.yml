@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Verify v0.0.12 OpenAPI contract
+        run: npm run api:check
+      - run: npm run lint
+      - run: npm test
+      - run: npm run build
+
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: PLAYWRIGHT_BROWSERS_PATH=0 npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - name: Test against treetop-rest v0.0.12
+        run: npm run test:e2e:live
+      - name: Validate demo environments against treetop-rest v0.0.12
+        run: npm run test:demos
+
+  container:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build image
+        run: docker build --tag treetop-frontend:test .
+      - name: Validate proxy configuration
+        run: |
+          docker run --rm \
+            --env TREETOP_API_URL=/default \
+            --env TREETOP_PROXY_TARGET=http://127.0.0.1:9999 \
+            --env 'TREETOP_PROXY_TARGETS={"/test":"http://127.0.0.1:10000"}' \
+            --env TREETOP_PROXY_ACCESS_TOKEN=test-token \
+            treetop-frontend:test nginx -t
+      - name: Test runtime configuration
+        run: |
+          docker run --detach --name treetop-frontend-test \
+            --publish 127.0.0.1:18080:8080 \
+            --env TREETOP_API_URL=/test-api \
+            --env TREETOP_ACTIVE_SERVER=test \
+            treetop-frontend:test
+          trap 'docker rm --force treetop-frontend-test' EXIT
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent http://127.0.0.1:18080/healthz >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:18080/healthz
+          curl --fail --silent http://127.0.0.1:18080/config.js | grep '"apiUrl":"/test-api"'
+          curl --fail --silent http://127.0.0.1:18080/config.js | grep '"activeServer":"test"'
+          curl --fail --silent http://127.0.0.1:18080/ >/dev/null

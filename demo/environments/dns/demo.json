@@ -1,0 +1,37 @@
+{
+  "name": "DNS operations",
+  "description": "The server's group, forbid, IP range, and derived hostname-label examples.",
+  "source": "Adapted from treetop-rest v0.0.10 testdata/dns.cedar and labels.json",
+  "examples": [
+    {
+      "outcome": "ALLOW",
+      "summary": "A webadmin can create a correctly named host in the web subnet",
+      "principal": "DNS::User::bob",
+      "groups": ["webadmins"],
+      "action": "DNS::Action::create_host",
+      "resource": "DNS::Host",
+      "resourceId": "web-01.example.com",
+      "attributes": { "name": "web-01.example.com", "ip": "192.168.1.42" }
+    },
+    {
+      "outcome": "DENY",
+      "summary": "The same webadmin is outside the permitted subnet",
+      "principal": "DNS::User::bob",
+      "groups": ["webadmins"],
+      "action": "DNS::Action::create_host",
+      "resource": "DNS::Host",
+      "resourceId": "web-01.example.com",
+      "attributes": { "name": "web-01.example.com", "ip": "10.0.0.42" }
+    },
+    {
+      "outcome": "DENY",
+      "summary": "Charlie's explicit forbid overrides membership in admins",
+      "principal": "DNS::User::charlie",
+      "groups": ["admins"],
+      "action": "DNS::Action::delete_host",
+      "resource": "DNS::Host",
+      "resourceId": "db-01.example.com",
+      "attributes": { "name": "db-01.example.com", "ip": "10.0.0.8" }
+    }
+  ]
+}

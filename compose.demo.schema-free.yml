@@ -1,0 +1,6 @@
+services:
+  server:
+    environment:
+      TREETOP_SCHEMA_URL: null
+      TREETOP_SCHEMA_UPDATE_FREQUENCY: null
+      TREETOP_SCHEMA_VALIDATION_MODE: permissive

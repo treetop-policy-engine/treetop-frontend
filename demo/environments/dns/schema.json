@@ -1,0 +1,81 @@
+{
+  "DNS": {
+    "commonTypes": {
+      "EmptyContext": {
+        "type": "Record",
+        "attributes": {},
+        "additionalAttributes": false
+      }
+    },
+    "entityTypes": {
+      "User": {
+        "memberOfTypes": ["Group"]
+      },
+      "Group": {},
+      "Host": {
+        "shape": {
+          "type": "Record",
+          "attributes": {
+            "id": { "type": "String" },
+            "name": { "type": "String" },
+            "ip": { "type": "Extension", "name": "ipaddr" },
+            "nameLabels": {
+              "type": "Set",
+              "element": { "type": "String" }
+            }
+          },
+          "additionalAttributes": false
+        }
+      },
+      "IPAddress": {
+        "shape": {
+          "type": "Record",
+          "attributes": {
+            "id": { "type": "String" },
+            "ip": { "type": "Extension", "name": "ipaddr" }
+          },
+          "additionalAttributes": false
+        }
+      },
+      "Label": {
+        "shape": {
+          "type": "Record",
+          "attributes": {
+            "id": { "type": "String" },
+            "name": { "type": "String" }
+          },
+          "additionalAttributes": false
+        }
+      }
+    },
+    "actions": {
+      "create_host": {
+        "appliesTo": { "principalTypes": ["User"], "resourceTypes": ["Host"], "context": { "type": "EmptyContext" } }
+      },
+      "delete_host": {
+        "appliesTo": { "principalTypes": ["User"], "resourceTypes": ["Host"], "context": { "type": "EmptyContext" } }
+      },
+      "view_host": {
+        "appliesTo": { "principalTypes": ["User"], "resourceTypes": ["Host"], "context": { "type": "EmptyContext" } }
+      },
+      "edit_host": {
+        "appliesTo": { "principalTypes": ["User"], "resourceTypes": ["Host"], "context": { "type": "EmptyContext" } }
+      },
+      "ip_network_management": {
+        "appliesTo": { "principalTypes": ["User"], "resourceTypes": ["IPAddress"], "context": { "type": "EmptyContext" } }
+      },
+      "create_label": {
+        "appliesTo": { "principalTypes": ["User"], "resourceTypes": ["Label"], "context": { "type": "EmptyContext" } }
+      },
+      "delete_label": {
+        "appliesTo": { "principalTypes": ["User"], "resourceTypes": ["Label"], "context": { "type": "EmptyContext" } }
+      },
+      "view_label": {
+        "appliesTo": { "principalTypes": ["User"], "resourceTypes": ["Label"], "context": { "type": "EmptyContext" } }
+      },
+      "edit_label": {
+        "appliesTo": { "principalTypes": ["User"], "resourceTypes": ["Label"], "context": { "type": "EmptyContext" } }
+      }
+    }
+  }
+}

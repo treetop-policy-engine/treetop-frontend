@@ -1,0 +1,51 @@
+{
+  "name": "Change approval",
+  "description": "Schema-backed request context, risk checks, group access, and forbid precedence.",
+  "source": "Ticket context adapted from treetop-core 0.0.19 schema tests",
+  "examples": [
+    {
+      "outcome": "ALLOW",
+      "summary": "A reviewer can approve a low-risk staging change",
+      "principal": "ChangeControl::User::alice",
+      "groups": ["reviewers"],
+      "action": "ChangeControl::Action::approve",
+      "resource": "ChangeControl::ChangeRequest",
+      "resourceId": "chg-1042",
+      "attributes": { "service": "billing", "risk": 2 },
+      "context": { "ticket": 1042, "environment": "staging", "emergency": false }
+    },
+    {
+      "outcome": "DENY",
+      "summary": "Reviewers cannot approve production changes",
+      "principal": "ChangeControl::User::alice",
+      "groups": ["reviewers"],
+      "action": "ChangeControl::Action::approve",
+      "resource": "ChangeControl::ChangeRequest",
+      "resourceId": "chg-1043",
+      "attributes": { "service": "billing", "risk": 2 },
+      "context": { "ticket": 1043, "environment": "production", "emergency": false }
+    },
+    {
+      "outcome": "DENY",
+      "summary": "The safety forbid overrides an admin permit",
+      "principal": "ChangeControl::User::carol",
+      "groups": ["admins"],
+      "action": "ChangeControl::Action::approve",
+      "resource": "ChangeControl::ChangeRequest",
+      "resourceId": "chg-1044",
+      "attributes": { "service": "identity", "risk": 5 },
+      "context": { "ticket": 1044, "environment": "production", "emergency": false }
+    },
+    {
+      "outcome": "ALLOW",
+      "summary": "An admin can use the explicit emergency path",
+      "principal": "ChangeControl::User::carol",
+      "groups": ["admins"],
+      "action": "ChangeControl::Action::approve",
+      "resource": "ChangeControl::ChangeRequest",
+      "resourceId": "chg-1045",
+      "attributes": { "service": "identity", "risk": 5 },
+      "context": { "ticket": 1045, "environment": "production", "emergency": true }
+    }
+  ]
+}

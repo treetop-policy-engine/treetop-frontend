@@ -1,0 +1,12 @@
+{
+  "requests": [
+    {
+      "id": "alice-edit-vacation",
+      "principal": {
+        "User": { "id": "alice", "namespace": [], "groups": [] }
+      },
+      "action": { "id": "edit", "namespace": [] },
+      "resource": { "kind": "Photo", "id": "VacationPhoto94.jpg" }
+    }
+  ]
+}

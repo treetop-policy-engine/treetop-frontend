@@ -1,0 +1,47 @@
+{
+  "Docs": {
+    "entityTypes": {
+      "User": {
+        "memberOfTypes": ["Group"]
+      },
+      "Group": {},
+      "Document": {
+        "shape": {
+          "type": "Record",
+          "attributes": {
+            "id": { "type": "String" },
+            "title": { "type": "String" },
+            "sensitivity": { "type": "Long" }
+          },
+          "additionalAttributes": false
+        }
+      }
+    },
+    "actions": {
+      "view": {
+        "annotations": { "doc": "Read a document" },
+        "appliesTo": {
+          "principalTypes": ["User"],
+          "resourceTypes": ["Document"],
+          "context": { "type": "Record", "attributes": {}, "additionalAttributes": false }
+        }
+      },
+      "edit": {
+        "annotations": { "doc": "Modify a document" },
+        "appliesTo": {
+          "principalTypes": ["User"],
+          "resourceTypes": ["Document"],
+          "context": { "type": "Record", "attributes": {}, "additionalAttributes": false }
+        }
+      },
+      "delete": {
+        "annotations": { "doc": "Delete a document" },
+        "appliesTo": {
+          "principalTypes": ["User"],
+          "resourceTypes": ["Document"],
+          "context": { "type": "Record", "attributes": {}, "additionalAttributes": false }
+        }
+      }
+    }
+  }
+}

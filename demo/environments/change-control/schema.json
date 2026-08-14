@@ -1,0 +1,55 @@
+{
+  "ChangeControl": {
+    "commonTypes": {
+      "EmptyContext": {
+        "type": "Record",
+        "attributes": {},
+        "additionalAttributes": false
+      },
+      "ApprovalContext": {
+        "type": "Record",
+        "attributes": {
+          "ticket": { "type": "Long" },
+          "environment": { "type": "String" },
+          "emergency": { "type": "Boolean" }
+        },
+        "additionalAttributes": false
+      }
+    },
+    "entityTypes": {
+      "User": {
+        "memberOfTypes": ["Group"]
+      },
+      "Group": {},
+      "ChangeRequest": {
+        "shape": {
+          "type": "Record",
+          "attributes": {
+            "id": { "type": "String" },
+            "service": { "type": "String" },
+            "risk": { "type": "Long" }
+          },
+          "additionalAttributes": false
+        }
+      }
+    },
+    "actions": {
+      "view": {
+        "annotations": { "doc": "Inspect a proposed change" },
+        "appliesTo": {
+          "principalTypes": ["User"],
+          "resourceTypes": ["ChangeRequest"],
+          "context": { "type": "EmptyContext" }
+        }
+      },
+      "approve": {
+        "annotations": { "doc": "Approve a change with ticket and environment context" },
+        "appliesTo": {
+          "principalTypes": ["User"],
+          "resourceTypes": ["ChangeRequest"],
+          "context": { "type": "ApprovalContext" }
+        }
+      }
+    }
+  }
+}

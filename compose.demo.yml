@@ -1,0 +1,51 @@
+name: treetop-demo
+
+services:
+  fixtures:
+    image: python:3.14-alpine
+    working_dir: /data
+    volumes:
+      - ./demo/environments/${TREETOP_DEMO:-documents}:/data:ro
+    command: ["python", "-m", "http.server", "8080", "--bind", "0.0.0.0"]
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/schema.json')"]
+      interval: 1s
+      timeout: 2s
+      retries: 10
+
+  server:
+    image: ghcr.io/treetop-policy-engine/treetop-rest:v0.0.10
+    depends_on:
+      fixtures:
+        condition: service_healthy
+    environment:
+      TREETOP_LISTEN: 0.0.0.0
+      TREETOP_PORT: 9999
+      TREETOP_POLICY_URL: http://fixtures:8080/policies.cedar
+      TREETOP_POLICY_UPDATE_FREQUENCY: 2
+      TREETOP_SCHEMA_URL: http://fixtures:8080/schema.json
+      TREETOP_SCHEMA_UPDATE_FREQUENCY: 2
+      TREETOP_LABELS_URL: http://fixtures:8080/labels.json
+      TREETOP_LABELS_UPDATE_FREQUENCY: 2
+      TREETOP_SCHEMA_VALIDATION_MODE: permissive
+      TREETOP_WORKERS: 1
+      TREETOP_RAYON_THREADS: 1
+    ports:
+      - "${TREETOP_DEMO_SERVER_PORT:-9999}:9999"
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:9999/readyz"]
+      interval: 1s
+      timeout: 2s
+      retries: 30
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      server:
+        condition: service_healthy
+    environment:
+      TREETOP_PROXY_TARGET: http://server:9999
+    ports:
+      - "${TREETOP_DEMO_FRONTEND_PORT:-4173}:8080"

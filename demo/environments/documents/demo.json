@@ -1,0 +1,37 @@
+{
+  "name": "Document permissions",
+  "description": "Small RBAC policy set with an explicit forbid for sensitive documents.",
+  "source": "Adapted from treetop-core 0.0.19 schema and evaluation tests",
+  "examples": [
+    {
+      "outcome": "ALLOW",
+      "summary": "Alice can view any document",
+      "principal": "Docs::User::alice",
+      "groups": [],
+      "action": "Docs::Action::view",
+      "resource": "Docs::Document",
+      "resourceId": "roadmap",
+      "attributes": { "title": "Roadmap", "sensitivity": 5 }
+    },
+    {
+      "outcome": "ALLOW",
+      "summary": "An editor can edit a document",
+      "principal": "Docs::User::bob",
+      "groups": ["editors"],
+      "action": "Docs::Action::edit",
+      "resource": "Docs::Document",
+      "resourceId": "handbook",
+      "attributes": { "title": "Handbook", "sensitivity": 2 }
+    },
+    {
+      "outcome": "DENY",
+      "summary": "The sensitivity forbid overrides an admin delete permit",
+      "principal": "Docs::User::carol",
+      "groups": ["admins"],
+      "action": "Docs::Action::delete",
+      "resource": "Docs::Document",
+      "resourceId": "payroll",
+      "attributes": { "title": "Payroll", "sensitivity": 5 }
+    }
+  ]
+}

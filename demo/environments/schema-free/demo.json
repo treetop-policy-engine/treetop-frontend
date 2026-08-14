@@ -1,0 +1,64 @@
+{
+  "name": "Schema-free photo policy",
+  "description": "Policy-inferred requests with direct and group grants plus forbid precedence, without an uploaded schema.",
+  "source": "Extended from treetop-rest v0.0.10 testdata/default.cedar",
+  "schema": false,
+  "examples": [
+    {
+      "outcome": "ALLOW",
+      "summary": "Alice can view the vacation photo",
+      "principal": "User::alice",
+      "groups": [],
+      "action": "Action::view",
+      "resource": "Photo",
+      "resourceId": "VacationPhoto94.jpg",
+      "requestFile": "allow-view.request.json"
+    },
+    {
+      "outcome": "DENY",
+      "summary": "The edit forbid overrides Alice's broader permit",
+      "principal": "User::alice",
+      "groups": [],
+      "action": "Action::edit",
+      "resource": "Photo",
+      "resourceId": "VacationPhoto94.jpg",
+      "requestFile": "forbid-edit.request.json"
+    },
+    {
+      "outcome": "ALLOW",
+      "summary": "Bob can view photos through the family group",
+      "principal": "User::bob",
+      "groups": ["family"],
+      "action": "Action::view",
+      "resource": "Photo",
+      "resourceId": "VacationPhoto94.jpg"
+    },
+    {
+      "outcome": "ALLOW",
+      "summary": "Carol can edit photos through the editors group",
+      "principal": "User::carol",
+      "groups": ["editors"],
+      "action": "Action::edit",
+      "resource": "Photo",
+      "resourceId": "VacationPhoto94.jpg"
+    },
+    {
+      "outcome": "DENY",
+      "summary": "Bob's delete forbid overrides his owners grant",
+      "principal": "User::bob",
+      "groups": ["owners"],
+      "action": "Action::delete",
+      "resource": "Photo",
+      "resourceId": "VacationPhoto94.jpg"
+    },
+    {
+      "outcome": "ALLOW",
+      "summary": "Carol can delete the same photo through the owners group",
+      "principal": "User::carol",
+      "groups": ["owners"],
+      "action": "Action::delete",
+      "resource": "Photo",
+      "resourceId": "VacationPhoto94.jpg"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "App": {
+    "entityTypes": {
+      "User": {
+        "memberOfTypes": ["Group"]
+      },
+      "Group": {},
+      "Document": {
+        "shape": {
+          "type": "Record",
+          "attributes": {
+            "id": { "type": "String" },
+            "title": { "type": "String" },
+            "revision": { "type": "Long" }
+          },
+          "additionalAttributes": false
+        }
+      }
+    },
+    "actions": {
+      "read": {
+        "annotations": {
+          "doc": "Read a document"
+        },
+        "appliesTo": {
+          "principalTypes": ["User"],
+          "resourceTypes": ["Document"],
+          "context": {
+            "type": "Record",
+            "attributes": {
+              "environment": { "type": "String" }
+            },
+            "additionalAttributes": false
+          }
+        }
+      }
+    }
+  }
+}
