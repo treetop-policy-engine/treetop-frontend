@@ -19,13 +19,19 @@ function formatInteger(value: number) {
 }
 
 function formatDuration(seconds: number) {
-  if (seconds < 0.001) return `${(seconds * 1_000_000).toFixed(seconds < 0.0001 ? 1 : 0)} µs`
+  if (seconds * 1_000_000 < 999.5) return `${(seconds * 1_000_000).toFixed(seconds < 0.0001 ? 1 : 0)} µs`
   if (seconds < 1) return `${(seconds * 1_000).toFixed(seconds < 0.01 ? 2 : 1)} ms`
   return `${seconds.toFixed(2)} s`
 }
 
 function displayAction(action: string) {
   return action.replace(/::"((?:\\.|[^"\\])*)"/g, '::$1')
+}
+
+function displayBatchClass(batchSizeClass: string) {
+  if (batchSizeClass === '0') return 'Empty batch'
+  if (batchSizeClass === '1') return '1 check'
+  return `${batchSizeClass.replace('-', '–')} checks`
 }
 
 function sumValues(rows: Array<{ value: number }>) {
@@ -95,6 +101,9 @@ export function MetricsPage() {
       .sort((left, right) => right.value - left.value)
     const requestLatency = histogramSeries(metrics, 'http_request_duration_seconds')
       .sort((left, right) => right.average - left.average)
+    const authorizationLatency = histogramSeries(metrics, 'authorization_request_duration_seconds')
+      .sort((left, right) => right.average - left.average)
+    const authorizationBatchSize = histogramSeries(metrics, 'authorization_batch_size')[0]
     const policyLatency = histogramSeries(metrics, 'policy_eval_duration_seconds')
       .sort((left, right) => right.average - left.average)
     const evaluations = aggregateMetric(metrics, 'policy_evals_total', ['action'])
@@ -111,8 +120,9 @@ export function MetricsPage() {
       allowed: allowed.find(({ labels }) => labels.action === action)?.value ?? 0,
       denied: denied.find(({ labels }) => labels.action === action)?.value ?? 0,
     })).sort((left, right) => right.total - left.total)
-    const totalPolicyLatency = policyLatency.reduce((sum, series) => sum + series.sum, 0)
-    const totalPolicyLatencyCount = policyLatency.reduce((sum, series) => sum + series.count, 0)
+    const totalAuthorizationLatency = authorizationLatency.reduce((sum, series) => sum + series.sum, 0)
+    const totalAuthorizationBatches = authorizationLatency.reduce((sum, series) => sum + series.count, 0)
+    const totalAuthorizationChecks = authorizationBatchSize?.sum ?? 0
     const build = metrics.samples.find(({ name }) => name === 'treetop_build_info')?.labels
     const reloads = [
       { label: 'Policy reloads', value: sumValues(aggregateMetric(metrics, 'policy_reloads_total', [])) },
@@ -122,14 +132,17 @@ export function MetricsPage() {
     return {
       requests,
       requestLatency,
+      authorizationLatency,
       policyLatency,
       decisions,
       totalRequests: sumValues(requests),
       totalEvaluations: sumValues(evaluations),
       totalAllowed: sumValues(allowed),
       totalDenied: sumValues(denied),
-      averagePolicyLatency: totalPolicyLatencyCount ? totalPolicyLatency / totalPolicyLatencyCount : 0,
-      policyLatencyCount: totalPolicyLatencyCount,
+      averageAuthorizationCheckLatency: totalAuthorizationChecks ? totalAuthorizationLatency / totalAuthorizationChecks : 0,
+      averageAuthorizationBatchLatency: totalAuthorizationBatches ? totalAuthorizationLatency / totalAuthorizationBatches : 0,
+      averageAuthorizationBatchSize: authorizationBatchSize?.average ?? 0,
+      authorizationCheckCount: totalAuthorizationChecks,
       build,
       reloads,
       sampleCount: metrics.samples.length,
@@ -164,6 +177,16 @@ export function MetricsPage() {
     tone: 'orange',
     histogram: series,
   }))
+  const authorizationLatencyRows: BarRow[] = dashboard.authorizationLatency.map((series) => ({
+    key: series.labels.batch_size_class,
+    label: displayBatchClass(series.labels.batch_size_class),
+    detail: `${formatInteger(series.count)} accepted batches`,
+    value: series.average,
+    displayValue: formatDuration(series.average),
+    secondary: series.p95UpperBound !== undefined ? `p95 bucket ≤ ${formatDuration(series.p95UpperBound)}` : undefined,
+    tone: 'blue',
+    histogram: series,
+  }))
   const decisionCount = dashboard.totalAllowed + dashboard.totalDenied
   const allowRate = decisionCount ? dashboard.totalAllowed / decisionCount : 0
 
@@ -173,7 +196,7 @@ export function MetricsPage() {
         <div>
           <div className="eyebrow">Operational telemetry</div>
           <h2>Metrics snapshot</h2>
-          <p>Explore request traffic, latency histograms, and policy decisions from the server’s Prometheus endpoint.</p>
+          <p>Explore request traffic, batch-aware authorization latency, and policy decisions from the server’s Prometheus endpoint.</p>
         </div>
         <div className="metrics-heading-actions">
           <div className="segmented" aria-label="Metrics representation">
@@ -201,12 +224,20 @@ export function MetricsPage() {
             <SummaryCard icon={<Activity size={18} />} label="HTTP requests" value={formatInteger(dashboard.totalRequests)} detail={`${requestRows.length} route series`} />
             <SummaryCard icon={<ShieldCheck size={18} />} label="Policy evaluations" value={formatInteger(dashboard.totalEvaluations)} detail={`${dashboard.decisions.length} actions`} />
             <SummaryCard icon={<Gauge size={18} />} label="Allow rate" value={decisionCount ? `${(allowRate * 100).toFixed(1)}%` : '—'} detail={`${formatInteger(dashboard.totalAllowed)} allow · ${formatInteger(dashboard.totalDenied)} deny`} />
-            <SummaryCard icon={<Clock3 size={18} />} label="Mean evaluation" value={dashboard.policyLatencyCount ? formatDuration(dashboard.averagePolicyLatency) : '—'} detail="Across all actions" />
+            <SummaryCard
+              icon={<Clock3 size={18} />}
+              label="Mean auth check"
+              value={dashboard.authorizationCheckCount ? formatDuration(dashboard.averageAuthorizationCheckLatency) : '—'}
+              detail={dashboard.authorizationCheckCount
+                ? `${formatDuration(dashboard.averageAuthorizationBatchLatency)} per batch · ${dashboard.averageAuthorizationBatchSize.toFixed(1)} checks/batch`
+                : 'Requires Treetop REST v0.0.12 metrics'}
+            />
           </div>
 
           <div className="metrics-chart-grid">
             <BarChart title="HTTP request volume" description="Cumulative requests grouped by method, route, and status" rows={requestRows} empty="No HTTP request counter series found." />
             <BarChart title="Average HTTP latency" description="Histogram sum ÷ count; select a route to inspect every bucket" rows={requestLatencyRows} empty="No HTTP latency histogram found." onSelect={(row) => row.histogram && setSelectedHistogram({ title: row.label, series: row.histogram })} />
+            <BarChart title="Authorization latency by batch size" description="Server time per accepted batch, grouped by bounded check count" rows={authorizationLatencyRows} empty="No REST v0.0.12 authorization latency histogram found." onSelect={(row) => row.histogram && setSelectedHistogram({ title: row.label, series: row.histogram })} />
             <DecisionChart rows={dashboard.decisions} />
             <BarChart title="Average policy evaluation latency" description="Grouped by Cedar action; select one to inspect every bucket" rows={policyLatencyRows} empty="No policy evaluation histogram found." onSelect={(row) => row.histogram && setSelectedHistogram({ title: row.label, series: row.histogram })} />
           </div>

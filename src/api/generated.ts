@@ -513,26 +513,6 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client IP is not allowed or cannot be resolved */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
             /** @description Internal server error */
             500: {
                 headers: {
@@ -562,26 +542,6 @@ export interface operations {
                     "application/json": components["schemas"]["HealthOK"];
                 };
             };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client IP is not allowed or cannot be resolved */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
         };
     };
     get_policies: {
@@ -608,26 +568,6 @@ export interface operations {
             };
             /** @description Bad request */
             400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client IP is not allowed or cannot be resolved */
-            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -679,18 +619,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client admission failed, uploads are disabled, or the upload token is invalid */
+            /** @description Uploads are disabled or the upload token is invalid */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -748,26 +677,6 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client IP is not allowed or cannot be resolved */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
             /** @description Internal server error */
             500: {
                 headers: {
@@ -803,26 +712,6 @@ export interface operations {
             };
             /** @description Bad request */
             400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client IP is not allowed or cannot be resolved */
-            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -874,18 +763,7 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client admission failed, uploads are disabled, or the upload token is invalid */
+            /** @description Uploads are disabled or the upload token is invalid */
             403: {
                 headers: {
                     [name: string]: unknown;
@@ -932,26 +810,6 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client IP is not allowed or cannot be resolved */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
             /** @description Internal server error */
             500: {
                 headers: {
@@ -979,26 +837,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VersionInfo"];
-                };
-            };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client IP is not allowed or cannot be resolved */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };
@@ -1032,7 +870,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description OpenMetrics text, or Prometheus protobuf with native histograms when requested by Accept */
+            /** @description OpenMetrics text, including authorization batch-size metrics, or Prometheus protobuf with native histograms when requested by Accept */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -1040,26 +878,6 @@ export interface operations {
                 content: {
                     "application/openmetrics-text": string;
                     "application/vnd.google.protobuf": string;
-                };
-            };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client IP is not allowed or cannot be resolved */
-            403: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };

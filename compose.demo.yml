@@ -5,7 +5,7 @@ services:
     image: python:3.14-alpine
     working_dir: /data
     volumes:
-      - ./demo/environments/${TREETOP_DEMO:-documents}:/data:ro
+      - ./demo/environments/${TREETOP_DEMO:-documents}:/data:ro,Z
     command: ["python", "-m", "http.server", "8080", "--bind", "0.0.0.0"]
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8080/schema.json')"]
@@ -14,7 +14,7 @@ services:
       retries: 10
 
   server:
-    image: ghcr.io/treetop-policy-engine/treetop-rest:v0.0.10
+    image: ghcr.io/treetop-policy-engine/treetop-rest:v0.0.12
     depends_on:
       fixtures:
         condition: service_healthy
@@ -28,6 +28,7 @@ services:
       TREETOP_LABELS_URL: http://fixtures:8080/labels.json
       TREETOP_LABELS_UPDATE_FREQUENCY: 2
       TREETOP_SCHEMA_VALIDATION_MODE: permissive
+      TREETOP_CLIENT_ALLOWLIST: "*"
       TREETOP_WORKERS: 1
       TREETOP_RAYON_THREADS: 1
     ports:

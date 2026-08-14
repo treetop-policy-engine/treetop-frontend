@@ -52,6 +52,8 @@ The Metrics page fetches `/metrics` on demand and parses Prometheus exposition i
 
 - request counts grouped by method, route, and status;
 - mean HTTP request latency and histogram buckets;
+- authorization-request latency grouped by bounded batch-size class;
+- mean server time per accepted authorization check, calculated from total accepted-batch latency divided by total accepted checks;
 - policy evaluation latency grouped by Cedar action;
 - allow and deny counts and rates; and
 - reload counters and build information.

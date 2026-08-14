@@ -9,7 +9,7 @@ The workbench can:
 - build schema-guided authorization requests, with a policy-inferred fallback when no schema is present;
 - inspect complete Cedar policies and find policies by principal;
 - explore Cedar entities, actions, resource types, and request context;
-- visualize Prometheus request, decision, and latency metrics; and
+- visualize Prometheus request, decision, batch-size, and latency metrics; and
 - save and switch between independent Treetop REST servers such as test and production.
 
 The frontend is read-only with respect to server configuration. Switching connections changes which server the browser queries; it does not copy, upload, or reconfigure policy data.
@@ -68,7 +68,7 @@ Servers protected by `TREETOP_ACCESS_TOKENS` can be reached either with a per-co
 
 The [user guide](docs/user-guide.md) describes the Playground, Policies, Schema, System, and Metrics pages, including schema-free behavior and policy lookup semantics.
 
-The Metrics page fetches the Prometheus endpoint when opened and visualizes request volume, HTTP and policy-evaluation latency, and allow/deny decisions. It does not poll automatically; use **Refresh** for a new snapshot or **Raw** to inspect the original exposition.
+The Metrics page fetches the Prometheus endpoint when opened and visualizes request volume, HTTP and policy-evaluation latency, authorization latency by batch-size class, mean server time per accepted authorization check, and allow/deny decisions. It does not poll automatically; use **Refresh** for a new snapshot or **Raw** to inspect the original exposition.
 
 ## Demo environments
 
@@ -86,7 +86,7 @@ The first run downloads and caches the official v0.0.12 Linux server binary. Sch
 
 ## API contract
 
-The checked-in TypeScript contract targets the `treetop-rest` v0.0.12 OpenAPI document, which includes the optional Bearer-token admission contract:
+The checked-in TypeScript contract targets the `treetop-rest` v0.0.12 OpenAPI document, including its authorization batch-size metrics:
 
 ```bash
 npm run api:generate

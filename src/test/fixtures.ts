@@ -83,6 +83,25 @@ http_request_duration_seconds_bucket{method="POST",path="/api/v1/authorize",stat
 http_request_duration_seconds_bucket{method="POST",path="/api/v1/authorize",status_code="200",le="+Inf"} 4
 http_request_duration_seconds_sum{method="POST",path="/api/v1/authorize",status_code="200"} 0.004
 http_request_duration_seconds_count{method="POST",path="/api/v1/authorize",status_code="200"} 4
+# HELP authorization_batch_size Authorization checks per completed, accepted POST /api/v1/authorize request
+# TYPE authorization_batch_size histogram
+authorization_batch_size_bucket{le="1.0"} 1
+authorization_batch_size_bucket{le="4.0"} 4
+authorization_batch_size_bucket{le="+Inf"} 4
+authorization_batch_size_sum 10
+authorization_batch_size_count 4
+# HELP authorization_request_duration_seconds Server-side authorization latency by bounded batch-size class
+# TYPE authorization_request_duration_seconds histogram
+authorization_request_duration_seconds_bucket{batch_size_class="1",le="0.0005"} 0
+authorization_request_duration_seconds_bucket{batch_size_class="1",le="0.005"} 1
+authorization_request_duration_seconds_bucket{batch_size_class="1",le="+Inf"} 1
+authorization_request_duration_seconds_sum{batch_size_class="1"} 0.001
+authorization_request_duration_seconds_count{batch_size_class="1"} 1
+authorization_request_duration_seconds_bucket{batch_size_class="2-4",le="0.0005"} 0
+authorization_request_duration_seconds_bucket{batch_size_class="2-4",le="0.005"} 3
+authorization_request_duration_seconds_bucket{batch_size_class="2-4",le="+Inf"} 3
+authorization_request_duration_seconds_sum{batch_size_class="2-4"} 0.009
+authorization_request_duration_seconds_count{batch_size_class="2-4"} 3
 # HELP http_requests_total Total HTTP requests
 # TYPE http_requests_total counter
 http_requests_total{client_ip="127.0.0.1",method="GET",path="/api/v1/policies",status_code="200"} 5
