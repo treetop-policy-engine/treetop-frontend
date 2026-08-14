@@ -26,7 +26,7 @@ connect directly to a Treetop server that permits browser cross-origin requests:
 docker run --rm --name treetop-workbench \
   -p 8080:8080 \
   -e TREETOP_API_URL=https://treetop.example.com \
-  ghcr.io/treetop-policy-engine/treetop-frontend:v0.1.0
+  ghcr.io/treetop-policy-engine/treetop-frontend:v0.0.1
 ```
 
 Replace `docker` with `podman` to use Podman.
@@ -39,7 +39,7 @@ docker run --rm --name treetop-workbench \
   --network treetop \
   -p 8080:8080 \
   -e TREETOP_PROXY_TARGET=http://treetop-rest:9999 \
-  ghcr.io/treetop-policy-engine/treetop-frontend:v0.1.0
+  ghcr.io/treetop-policy-engine/treetop-frontend:v0.0.1
 ```
 
 `localhost` inside this container refers to the frontend container, not the
@@ -52,7 +52,7 @@ use a read-only root filesystem:
 docker run --rm --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m \
   -p 8080:8080 \
   -e TREETOP_API_URL=https://treetop.example.com \
-  ghcr.io/treetop-policy-engine/treetop-frontend:v0.1.0
+  ghcr.io/treetop-policy-engine/treetop-frontend:v0.0.1
 ```
 
 The health check endpoint is `/healthz`.
@@ -75,7 +75,7 @@ For multiple proxied servers:
 docker run --rm --network treetop -p 8080:8080 \
   -e 'TREETOP_SERVER_PROFILES={"defaultServer":"test","servers":[{"id":"test","name":"Test","url":"/treetop-test"},{"id":"production","name":"Production","url":"/treetop-production"}]}' \
   -e 'TREETOP_PROXY_TARGETS={"/treetop-test":"http://treetop-test:9999","/treetop-production":"http://treetop-production:9999"}' \
-  ghcr.io/treetop-policy-engine/treetop-frontend:v0.1.0
+  ghcr.io/treetop-policy-engine/treetop-frontend:v0.0.1
 ```
 
 The image validates proxy paths, upstream URLs, JSON, and token character sets
@@ -97,9 +97,9 @@ then extract it into an nginx, Caddy, Apache, object-storage, or CDN document
 root:
 
 ```bash
-sha256sum --check treetop-workbench-v0.1.0.tar.gz.sha256
+sha256sum --check treetop-workbench-v0.0.1.tar.gz.sha256
 mkdir treetop-workbench
-tar --extract --gzip --file treetop-workbench-v0.1.0.tar.gz \
+tar --extract --gzip --file treetop-workbench-v0.0.1.tar.gz \
   --directory treetop-workbench
 ```
 
