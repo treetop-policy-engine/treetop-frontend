@@ -119,7 +119,7 @@ npm run test:demos
 
 ## Releases
 
-Pushing a semantic version tag such as `v0.1.0` runs unit, lint, and production
+Pushing a semantic version tag such as `v0.0.1` runs unit, lint, and production
 build verification; publishes `linux/amd64` and `linux/arm64` image manifests to
 GHCR; updates `latest` for stable versions; and creates or updates a GitHub
 Release with a `dist` tarball and SHA-256 checksum. The image is also tagged with
