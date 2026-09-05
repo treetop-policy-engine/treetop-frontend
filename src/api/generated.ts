@@ -1,5 +1,5 @@
 /**
- * Generated from the treetop-rest v0.0.12 OpenAPI contract.
+ * Generated from the treetop-rest v0.0.16 OpenAPI contract.
  * Do not edit by hand; run npm run api:generate.
  */
 export interface paths {
@@ -13,6 +13,22 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["authorize"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/bundle": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["upload_bundle"];
         delete?: never;
         options?: never;
         head?: never;
@@ -202,7 +218,7 @@ export interface components {
         } | {
             /** @enum {string} */
             type: "Ip";
-            value: string;
+            value: components["schemas"]["CedarIp"];
         } | {
             /** @enum {string} */
             type: "Set";
@@ -273,6 +289,24 @@ export interface components {
             /** @enum {string} */
             status: "failed";
         };
+        /** @description Metadata for the complete bundle that produced the active policy state. */
+        BundleMetadata: {
+            archive_sha256: string;
+            bundle_id: string;
+            compressed_size: number;
+            /** Format: int32 */
+            format_version: number;
+            /** Format: date-time */
+            loaded_at: string;
+            module_count: number;
+            /** Format: int32 */
+            refresh_frequency?: number | null;
+            signed: boolean;
+            signing_key_id?: string | null;
+            source?: null | components["schemas"]["Endpoint"];
+        };
+        /** @description An IP address or network accepted by Cedar's `ip()` extension. */
+        CedarIp: string;
         Core: {
             cedar: string;
             version: string;
@@ -315,6 +349,7 @@ export interface components {
             /** @description Index of the request in the original batch */
             index: number;
         };
+        LabelSetVersion: string;
         Metadata_OfLabels: {
             content: string;
             entries: number;
@@ -369,6 +404,7 @@ export interface components {
         /** @description Metadata about the policies and labels in the policy store */
         PoliciesMetadata: {
             allow_upload: boolean;
+            bundle?: null | components["schemas"]["BundleMetadata"];
             labels: components["schemas"]["Metadata_OfLabels"];
             policies: components["schemas"]["Metadata_OfPolicies"];
             schema: components["schemas"]["Metadata_OfSchema"];
@@ -384,10 +420,16 @@ export interface components {
          * @enum {string}
          */
         PolicyMatchReason: "PrincipalEq" | "PrincipalIn" | "PrincipalAny" | "PrincipalIs" | "PrincipalIsIn" | "ActionEq" | "ActionIn" | "ActionAny" | "ResourceEq" | "ResourceIn" | "ResourceAny" | "ResourceIs" | "ResourceIsIn";
-        /** @description Version metadata for the policy set used during an evaluation. */
+        /** @description Version metadata for the complete engine state used during an evaluation. */
         PolicyVersion: {
+            /**
+             * Format: int64
+             * @description Monotonic generation within this engine instance.
+             */
+            generation?: number;
             /** @description Hash of the policy source (e.g. SHA-256 of the policy text). */
             hash: string;
+            label_set?: null | components["schemas"]["LabelSetVersion"];
             /** @description When this policy set was loaded into the engine. */
             loaded_at: string;
         };
@@ -397,7 +439,7 @@ export interface components {
         } | {
             Group: components["schemas"]["Group"];
         };
-        /** @description A fully‐qualified identifier, with zero runtime cost over `(Vec<String>, String)`. */
+        /** @description A fully qualified, validated identifier with its parsed Cedar UID cached. */
         QualifiedId: {
             id: string;
             namespace: string[];
@@ -513,6 +555,108 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client IP is not allowed or cannot be resolved */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    upload_bundle: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description A gzip-compressed Treetop bundle archive */
+        requestBody: {
+            content: {
+                "application/gzip": string;
+                "application/x-gzip": string;
+            };
+        };
+        responses: {
+            /** @description Bundle verified and atomically applied */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoliciesMetadata"];
+                };
+            };
+            /** @description Invalid archive, signature, policy, schema, or labels */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client admission failed, uploads are disabled, or the upload token is invalid */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Compressed bundle exceeds the bundle or global request-size limit */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unsupported media type */
+            415: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             /** @description Internal server error */
             500: {
                 headers: {
@@ -542,6 +686,26 @@ export interface operations {
                     "application/json": components["schemas"]["HealthOK"];
                 };
             };
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client IP is not allowed or cannot be resolved */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
         };
     };
     get_policies: {
@@ -568,6 +732,26 @@ export interface operations {
             };
             /** @description Bad request */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client IP is not allowed or cannot be resolved */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -619,8 +803,28 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Uploads are disabled or the upload token is invalid */
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client admission failed, uploads are disabled, or the upload token is invalid */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Independent uploads are disabled while bundle URL mode is active */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -677,6 +881,26 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client IP is not allowed or cannot be resolved */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             /** @description Internal server error */
             500: {
                 headers: {
@@ -712,6 +936,26 @@ export interface operations {
             };
             /** @description Bad request */
             400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client IP is not allowed or cannot be resolved */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -763,8 +1007,28 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
-            /** @description Uploads are disabled or the upload token is invalid */
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client admission failed, uploads are disabled, or the upload token is invalid */
             403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Independent uploads are disabled while bundle URL mode is active */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -810,6 +1074,26 @@ export interface operations {
                     "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client IP is not allowed or cannot be resolved */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
             /** @description Internal server error */
             500: {
                 headers: {
@@ -837,6 +1121,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VersionInfo"];
+                };
+            };
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client IP is not allowed or cannot be resolved */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };
@@ -870,7 +1174,7 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description OpenMetrics text, including authorization batch-size metrics, or Prometheus protobuf with native histograms when requested by Accept */
+            /** @description OpenMetrics text, including authorization batch-size metrics, or Prometheus protobuf containing HTTP, authorization, and policy-evaluation native histograms when requested by Accept */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -878,6 +1182,26 @@ export interface operations {
                 content: {
                     "application/openmetrics-text": string;
                     "application/vnd.google.protobuf": string;
+                };
+            };
+            /** @description Missing, malformed, or invalid Bearer token */
+            401: {
+                headers: {
+                    /** @description Bearer authentication challenge */
+                    "WWW-Authenticate"?: string;
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Client IP is not allowed or cannot be resolved */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
                 };
             };
         };

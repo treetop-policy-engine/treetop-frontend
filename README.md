@@ -82,11 +82,11 @@ npm run demo -- change-control
 npm run demo -- schema-free
 ```
 
-The first run downloads and caches the official v0.0.12 Linux server binary. Schema-backed environments use typed guided forms; the schema-free environment infers its basic choices from policy scopes. Each includes suggested allow/deny requests. See [Demo environments](demo/README.md) for provenance, Docker startup, port overrides, and adding environments.
+The first run downloads and caches the official v0.0.16 Linux server binary. Schema-backed environments use typed guided forms; the schema-free environment infers its basic choices from policy scopes. Each includes suggested allow/deny requests. See [Demo environments](demo/README.md) for provenance, Docker startup, port overrides, and adding environments.
 
 ## API contract
 
-The checked-in TypeScript contract targets the `treetop-rest` v0.0.12 OpenAPI document, including its authorization batch-size metrics:
+The checked-in TypeScript contract targets the `treetop-rest` v0.0.16 OpenAPI document, including its authorization batch-size metrics:
 
 ```bash
 npm run api:generate
@@ -99,7 +99,7 @@ TREETOP_REST_REF=main npm run api:generate
 TREETOP_OPENAPI_URL=http://127.0.0.1:9999/openapi.json npm run api:generate
 ```
 
-`npm run api:check` regenerates the v0.0.12 contract and fails if the checked-in client has drifted.
+`npm run api:check` regenerates the v0.0.16 contract and fails if the checked-in client has drifted.
 
 ## Tests
 
@@ -114,7 +114,7 @@ npm run test:demos
 ```
 
 - `test:e2e` runs browser scenarios with a mocked REST boundary, including server-profile persistence and switching.
-- `test:e2e:live` downloads the official Linux v0.0.12 server, loads real Cedar policy/schema fixtures with both upload and Bearer credentials, and runs the primary authorization flow through Vite's same-origin proxy. Set `TREETOP_REST_VERSION` to exercise another release or `TREETOP_SERVER_BIN` to use a local build.
+- `test:e2e:live` downloads the official Linux v0.0.16 server, loads real Cedar policy/schema fixtures with both upload and Bearer credentials, and runs the primary authorization flow through Vite's same-origin proxy. Set `TREETOP_REST_VERSION` to exercise another release or `TREETOP_SERVER_BIN` to use a local build.
 - `test:demos` validates every advertised demo decision and principal lookup against the released server.
 
 ## Releases
@@ -128,3 +128,10 @@ the original Git tag and the equivalent semantic versions.
 GHCR creates a new package as private by default. After the first tagged
 workflow succeeds, a package administrator must make the package public once in
 GitHub's package settings so unauthenticated Docker and Podman pulls work.
+
+### Authorization state metadata
+
+The playground and system pages show the engine generation and label configuration identifier when
+provided by the server. Older responses can omit these fields. Generation belongs to one engine
+instance and can restart when the server replaces it; the label identifier correlates configurations
+across replacements.

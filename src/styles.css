@@ -186,7 +186,7 @@ input:disabled, select:disabled { color: #969991; background: #f0efe9; cursor: n
 .policy-format-toggle button.active { color: #173c2d; background: #c7eb79; }
 .policy-format-toggle button:disabled { opacity: .38; cursor: not-allowed; }
 .policy-viewer pre { max-height: 360px; overflow: auto; margin: 0; padding: 11px; color: #d5e2da; font-size: 9px; line-height: 1.55; white-space: pre-wrap; }
-.snapshot-line { display: flex; align-items: center; gap: 8px; padding-top: 12px; color: var(--muted); font-size: 8.5px; }
+.snapshot-line { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 12px; color: var(--muted); font-size: 8.5px; }
 .snapshot-line code { padding: 2px 4px; color: #45564c; background: #edefeb; border-radius: 3px; }
 .rerun { width: calc(100% - 36px); margin: 0 18px 12px; }
 

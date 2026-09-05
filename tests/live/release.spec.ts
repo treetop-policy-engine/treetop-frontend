@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
 
 test('evaluates a schema-guided request against the released server', async ({ page }) => {
-  const expectedVersion = (process.env.TREETOP_REST_VERSION ?? 'v0.0.12').replace(/^v/, '')
+  const expectedVersion = (process.env.TREETOP_REST_VERSION ?? 'v0.0.16').replace(/^v/, '')
   await page.goto('/')
   await expect(page.getByText('Schema-backed', { exact: true })).toBeVisible()
   await expect(page.getByLabel('Action')).toHaveValue('App::Action::read')

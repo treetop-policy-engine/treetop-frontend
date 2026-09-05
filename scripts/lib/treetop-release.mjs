@@ -36,7 +36,7 @@ export function run(command, args, options = {}) {
   })
 }
 
-export async function ensureTreetopServer({ root = process.cwd(), release = 'v0.0.12' } = {}) {
+export async function ensureTreetopServer({ root = process.cwd(), release = 'v0.0.16' } = {}) {
   const override = process.env.TREETOP_SERVER_BIN
   if (override) {
     const resolved = path.resolve(root, override)

@@ -6,7 +6,7 @@ import { ensureTreetopServer, uploadFixture, waitForHttp } from './lib/treetop-r
 
 const root = process.cwd()
 const environmentsRoot = path.join(root, 'demo', 'environments')
-const release = process.env.TREETOP_REST_VERSION ?? 'v0.0.12'
+const release = process.env.TREETOP_REST_VERSION ?? 'v0.0.16'
 const serverPort = Number(process.env.TREETOP_DEMO_SERVER_PORT ?? 9999)
 const frontendPort = Number(process.env.TREETOP_DEMO_FRONTEND_PORT ?? 5173)
 const fixturesPort = Number(process.env.TREETOP_DEMO_FIXTURES_PORT ?? 18080)

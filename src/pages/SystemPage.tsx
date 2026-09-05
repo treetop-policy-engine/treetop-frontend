@@ -70,6 +70,8 @@ export function SystemPage({ onConfigure }: { onConfigure: () => void }) {
         <StatusCard icon={<Radio size={19} />} title="Current snapshot">
           <Row label="Policy hash" value={version?.policies.hash ? `${version.policies.hash.slice(0, 12)}…` : undefined} mono />
           <Row label="Policy loaded" value={version?.policies.loaded_at ? new Date(version.policies.loaded_at).toLocaleString() : undefined} />
+          <Row label="Policy generation" value={version?.policies.generation} />
+          <Row label="Label set" value={version?.policies.label_set} mono />
           <Row label="Schema hash" value={version?.schema?.hash ? `${version.schema.hash.slice(0, 12)}…` : 'None'} mono />
         </StatusCard>
       </div>

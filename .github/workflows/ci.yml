@@ -19,7 +19,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Verify v0.0.12 OpenAPI contract
+      - name: Verify v0.0.16 OpenAPI contract
         run: npm run api:check
       - run: npm run lint
       - run: npm test
@@ -37,9 +37,9 @@ jobs:
       - run: npm ci
       - run: PLAYWRIGHT_BROWSERS_PATH=0 npx playwright install --with-deps chromium
       - run: npm run test:e2e
-      - name: Test against treetop-rest v0.0.12
+      - name: Test against treetop-rest v0.0.16
         run: npm run test:e2e:live
-      - name: Validate demo environments against treetop-rest v0.0.12
+      - name: Validate demo environments against treetop-rest v0.0.16
         run: npm run test:demos
 
   container:
