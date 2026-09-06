@@ -15,7 +15,7 @@ Run one natively:
 npm run demo -- dns
 ```
 
-The runner builds and caches the exact REST source candidate with Cargo, loads the selected schema and policy with both upload and Bearer credentials, starts Vite with server-side credential injection, prints example requests, and stops everything together on Ctrl+C. The `schema-free` environment deliberately uses permissive mode; its guided form infers principal, action, and resource choices from static policy scopes, while the provided JSON requests cover attributes or context that cannot be inferred safely. The default build requires Git and Rust; set `TREETOP_SERVER_BIN` for a local executable or use Docker.
+The runner builds and caches the exact REST release source with Cargo, loads the selected schema and policy with both upload and Bearer credentials, starts Vite with server-side credential injection, prints example requests, and stops everything together on Ctrl+C. The `schema-free` environment deliberately uses permissive mode; its guided form infers principal, action, and resource choices from static policy scopes, while the provided JSON requests cover attributes or context that cannot be inferred safely. The default build requires Git and Rust; set `TREETOP_SERVER_BIN` for a local executable or use Docker.
 
 Run one with Docker:
 
@@ -45,4 +45,4 @@ To create another environment, copy one directory and keep these filenames:
 - `labels.json` — label rules, or `[]` when unused
 - `demo.json` — description, provenance, and suggested requests printed by the native runner
 
-Validate every advertised example against the candidate server with `npm run test:demos`. This also asserts whether each profile is schema-backed or intentionally schema-free.
+Validate every advertised example against the pinned release server with `npm run test:demos`. This also asserts whether each profile is schema-backed or intentionally schema-free.

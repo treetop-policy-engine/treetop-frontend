@@ -19,7 +19,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Verify 0.1.0 candidate OpenAPI contract
+      - name: Verify 0.1.0 release OpenAPI contract
         run: npm run api:check
       - run: npm run lint
       - run: npm test
@@ -40,9 +40,9 @@ jobs:
         with:
           toolchain: stable
       - run: npm run test:e2e
-      - name: Test against treetop-rest 0.1.0 candidate
+      - name: Test against treetop-rest 0.1.0 release
         run: npm run test:e2e:live
-      - name: Validate demo environments against treetop-rest 0.1.0 candidate
+      - name: Validate demo environments against treetop-rest 0.1.0 release
         run: npm run test:demos
 
   container:
@@ -68,7 +68,7 @@ jobs:
             --env TREETOP_ACTIVE_SERVER=test \
             treetop-frontend:test
           trap 'docker rm --force treetop-frontend-test' EXIT
-          for attempt in $(seq 1 20); do
+          for _ in $(seq 1 20); do
             if curl --fail --silent http://127.0.0.1:18080/healthz >/dev/null; then break; fi
             sleep 1
           done

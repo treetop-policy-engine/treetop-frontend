@@ -2,7 +2,7 @@
 
 Upgrade the workbench and REST to the coordinated 0.1.0 contract. Early releases
 prioritize correctness over compatibility. The generated API comes from the
-immutable REST candidate in `scripts/lib/treetop-contract.mjs`.
+immutable REST release revision in `scripts/lib/treetop-contract.mjs`.
 
 ## Declared targets
 
@@ -24,7 +24,7 @@ scope for presentation. Constrain resource types before trusting derived labels.
 
 Migrate bundle/module manifests to format 2, rebuild archives, and re-sign.
 All included demos use the new syntax and verify their advertised decisions
-against the same candidate server.
+against the same released server revision.
 
 ## Current metadata and responses
 
@@ -42,10 +42,10 @@ The retired `treetop.baseUrl` storage key is ignored. Configure current server
 profiles again if you previously used only that key. Current stored profiles are
 unchanged.
 
-## Candidate builds
+## Reproducible builds
 
 Demo and live-test scripts build the exact source revision with `cargo --locked`;
 old release-download selection is removed. `TREETOP_SERVER_BIN` accepts an explicit
 local executable. The Docker demo builds the same revision. Source builds require
-Git and Rust. After approval, release Core, Bundle, and REST before the frontend.
-Do not merge, tag, or publish before user approval.
+Git and Rust. The pinned commit belongs to REST 0.1.0 and uses published Core and
+Bundle packages. Release those prerequisites before the frontend.

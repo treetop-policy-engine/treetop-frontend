@@ -5,7 +5,7 @@
 ### Breaking changes
 
 - Adopt REST 0.1.0 and declared `(resource_type, attribute)` label ownership.
-  Update guided fields, demos, generated API, and candidate source builds.
+  Update guided fields, demos, generated API, and reproducible release source builds.
 - Require current status and policy versions. Reject old label syntax, duplicate
   targets, malformed batch responses, and numeric metadata that would lose
   precision in JavaScript. Remove unlimited-limit and omitted-generation display.
