@@ -89,5 +89,5 @@ function StatusCard({ icon, title, children }: { icon: React.ReactNode; title: s
 }
 
 function Row({ label, value, mono }: { label: string; value?: string | number | null; mono?: boolean }) {
-  return <div><span>{label}</span><strong className={mono ? 'mono' : ''}>{value ?? '—'}</strong></div>
+  return <div><span>{label}</span><strong className={mono ? 'mono' : ''} title={mono && typeof value === 'string' ? value : undefined}>{value ?? '—'}</strong></div>
 }

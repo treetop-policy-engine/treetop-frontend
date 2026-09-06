@@ -305,5 +305,5 @@ test('system view retains complete version metadata', async ({ page }) => {
   const snapshot = page.getByText('Current snapshot', { exact: true }).locator('../..')
   await expect(snapshot.getByText('Policy generation', { exact: true })).toBeVisible()
   await expect(snapshot.getByText('7', { exact: true })).toBeVisible()
-  await expect(snapshot.getByText('b'.repeat(64), { exact: true })).toBeVisible()
+  await expect(snapshot.getByTitle('b'.repeat(64), { exact: true })).toHaveText('b'.repeat(64))
 })
