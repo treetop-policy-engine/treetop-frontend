@@ -62,7 +62,7 @@ export function SystemPage({ onConfigure }: { onConfigure: () => void }) {
           <Row label="Parallel cutoff" value={parallel?.par_threshold} />
         </StatusCard>
         <StatusCard icon={<Gauge size={19} />} title="Request limits">
-          <Row label="Batch size" value={limits?.max_batch_size ?? 'Legacy / unlimited'} />
+          <Row label="Batch size" value={limits?.max_batch_size} />
           <Row label="Context bytes" value={limits?.max_context_bytes} />
           <Row label="Context depth" value={limits?.max_context_depth} />
           <Row label="Context keys" value={limits?.max_context_keys} />

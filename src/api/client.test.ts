@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { statusResponse } from '../test/fixtures'
 import { TreetopApiError, TreetopClient, validateBrowserAccessToken } from './client'
 
 function ok(body = '{}', contentType = 'application/json') {
@@ -17,7 +18,7 @@ describe('TreetopClient access tokens', () => {
       })
       return String(input).endsWith('/metrics') || String(input).endsWith('/livez') || String(input).endsWith('/readyz')
         ? ok('ok\n', 'text/plain')
-        : ok()
+        : ok(JSON.stringify(statusResponse))
     }))
     const client = new TreetopClient('/treetop-api', { accessToken: 'memory-only-token' })
 

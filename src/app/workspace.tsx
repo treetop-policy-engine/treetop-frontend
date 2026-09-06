@@ -21,7 +21,6 @@ import {
   chooseActiveServer,
   configuredServerProfiles,
   mergeServerProfiles,
-  migrateLegacyServer,
   parseServerProfileConfiguration,
   readStoredServerProfiles,
   saveBrowserServer,
@@ -77,13 +76,12 @@ function initialConnections() {
   const configured = configuredServerProfiles(configuredProfileData, defaultUrl)
   const stored = readStoredServerProfiles(storage)
   const merged = mergeServerProfiles(configured, stored)
-  const migrated = migrateLegacyServer(storage, merged)
   const activeServer = chooseActiveServer(
-    migrated.profiles,
-    stored.activeServer ?? migrated.activeServer,
+    merged,
+    stored.activeServer,
     configuredDefault,
   )
-  return { profiles: migrated.profiles, activeServer }
+  return { profiles: merged, activeServer }
 }
 
 const initial = initialConnections()

@@ -1,4 +1,5 @@
 import { createServer } from 'node:http'
+import { REST_VERSION } from './lib/treetop-contract.mjs'
 import fs from 'node:fs/promises'
 import { spawn } from 'node:child_process'
 import path from 'node:path'
@@ -6,10 +7,9 @@ import { ensureTreetopServer, uploadFixture, waitForHttp } from './lib/treetop-r
 
 const root = process.cwd()
 const environmentsRoot = path.join(root, 'demo', 'environments')
-const release = process.env.TREETOP_REST_VERSION ?? 'v0.0.16'
 const serverPort = Number(process.env.TREETOP_DEMO_TEST_SERVER_PORT ?? 19997)
 const fixturesPort = Number(process.env.TREETOP_DEMO_TEST_FIXTURES_PORT ?? 18081)
-const binary = await ensureTreetopServer({ root, release })
+const binary = await ensureTreetopServer({ root })
 const accessToken = 'frontend-demo-test-access-token'
 const authorization = { Authorization: `Bearer ${accessToken}` }
 
@@ -202,4 +202,4 @@ const environments = (await fs.readdir(environmentsRoot, { withFileTypes: true }
   .sort()
 
 for (const environment of environments) await testEnvironment(environment)
-console.log(`\n${environments.length} demo environments passed against treetop-rest ${release}.`)
+console.log(`\n${environments.length} demo environments passed against treetop-rest ${REST_VERSION}.`)

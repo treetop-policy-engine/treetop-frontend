@@ -24,7 +24,6 @@ export type StoredServerProfiles = {
 }
 
 export const SERVER_PROFILES_STORAGE_KEY = 'treetop.serverProfiles.v1'
-export const LEGACY_SERVER_URL_STORAGE_KEY = 'treetop.baseUrl'
 
 function nonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0
@@ -125,7 +124,6 @@ export function writeStoredServerProfiles(
     .map(({ id, name, baseUrl }) => ({ id, name, url: baseUrl }))
   try {
     storage.setItem(SERVER_PROFILES_STORAGE_KEY, JSON.stringify({ activeServer, servers }))
-    storage.removeItem(LEGACY_SERVER_URL_STORAGE_KEY)
   } catch {
     // The workbench remains usable when browser storage is disabled.
   }
@@ -140,23 +138,6 @@ export function mergeServerProfiles(configured: ServerProfile[], stored: StoredS
     return [normalizeInput(input, id, 'browser')]
   })
   return [...configured, ...browser]
-}
-
-export function migrateLegacyServer(
-  storage: Storage | undefined,
-  profiles: ServerProfile[],
-): { profiles: ServerProfile[]; activeServer?: string } {
-  if (!storage) return { profiles }
-  try {
-    const legacyUrl = storage.getItem(LEGACY_SERVER_URL_STORAGE_KEY)?.trim().replace(/\/+$/, '')
-    if (!legacyUrl) return { profiles }
-    const existing = profiles.find(({ baseUrl }) => baseUrl === legacyUrl)
-    if (existing) return { profiles, activeServer: existing.id }
-    const profile = normalizeInput({ name: 'Previous server', url: legacyUrl }, browserId(), 'browser')
-    return { profiles: [...profiles, profile], activeServer: profile.id }
-  } catch {
-    return { profiles }
-  }
 }
 
 export function chooseActiveServer(

@@ -3,7 +3,6 @@ import {
   chooseActiveServer,
   configuredServerProfiles,
   mergeServerProfiles,
-  migrateLegacyServer,
   parseServerProfileConfiguration,
   readStoredServerProfiles,
   saveBrowserServer,
@@ -42,7 +41,7 @@ describe('server profiles', () => {
     expect(chooseActiveServer(profiles, undefined, configuration?.defaultServer)).toBe('prod')
   })
 
-  it('ignores malformed configuration and falls back to the legacy URL setting', () => {
+  it('ignores malformed configuration and falls back to the default URL setting', () => {
     expect(parseServerProfileConfiguration('{broken')).toBeUndefined()
     expect(configuredServerProfiles(undefined, '/treetop-api')).toEqual([
       { id: 'default', name: 'Default', baseUrl: '/treetop-api', origin: 'configured' },
@@ -69,18 +68,9 @@ describe('server profiles', () => {
     expect(chooseActiveServer(profiles, stored.activeServer, undefined)).toBe('local')
   })
 
-  it('migrates the previously saved server URL', () => {
+  it('ignores the retired single-server storage key', () => {
     storage.setItem('treetop.baseUrl', 'http://old.example.test/')
-    const configured = configuredServerProfiles(undefined, '/treetop-api')
-    const migrated = migrateLegacyServer(storage, configured)
-
-    expect(migrated.profiles).toHaveLength(2)
-    expect(migrated.profiles[1]).toMatchObject({
-      name: 'Previous server',
-      baseUrl: 'http://old.example.test',
-      origin: 'browser',
-    })
-    expect(migrated.activeServer).toBe(migrated.profiles[1].id)
+    expect(readStoredServerProfiles(storage).servers).toEqual([])
   })
 
   it('adds and edits browser-managed profiles', () => {

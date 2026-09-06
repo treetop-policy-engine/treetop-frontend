@@ -14,7 +14,8 @@ services:
       retries: 10
 
   server:
-    image: ghcr.io/treetop-policy-engine/treetop-rest:v0.0.12
+    build:
+      context: https://github.com/treetop-policy-engine/treetop-rest.git#a8356004af9970062eb8535364d4d53a6859cf9d
     depends_on:
       fixtures:
         condition: service_healthy
