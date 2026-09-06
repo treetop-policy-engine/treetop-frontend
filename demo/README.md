@@ -15,7 +15,7 @@ Run one natively:
 npm run demo -- dns
 ```
 
-The runner downloads and caches the official v0.0.12 Linux server, loads the selected schema and policy with both upload and Bearer credentials, starts Vite with server-side credential injection, prints example requests, and stops everything together on Ctrl+C. The `schema-free` environment deliberately uses permissive mode; its guided form infers principal, action, and resource choices from static policy scopes, while the provided JSON requests cover attributes or context that cannot be inferred safely. On another operating system, set `TREETOP_SERVER_BIN` to a local server executable or use Docker.
+The runner downloads and caches the official v0.0.16 Linux server, loads the selected schema and policy with both upload and Bearer credentials, starts Vite with server-side credential injection, prints example requests, and stops everything together on Ctrl+C. The `schema-free` environment deliberately uses permissive mode; its guided form infers principal, action, and resource choices from static policy scopes, while the provided JSON requests cover attributes or context that cannot be inferred safely. On another operating system, set `TREETOP_SERVER_BIN` to a local server executable or use Docker.
 
 Run one with Docker:
 

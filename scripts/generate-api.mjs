@@ -1,7 +1,7 @@
 import fs from 'node:fs/promises'
 import openapiTS, { astToString } from 'openapi-typescript'
 
-const ref = process.env.TREETOP_REST_REF ?? 'v0.0.12'
+const ref = process.env.TREETOP_REST_REF ?? 'v0.0.16'
 const source = process.env.TREETOP_OPENAPI_URL ?? `https://raw.githubusercontent.com/treetop-policy-engine/treetop-rest/${ref}/docs/openapi.json`
 const output = new URL('../src/api/generated.ts', import.meta.url)
 

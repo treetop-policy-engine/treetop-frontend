@@ -2,7 +2,7 @@ import { spawn } from 'node:child_process'
 import path from 'node:path'
 import { ensureTreetopServer, run, uploadFixture, waitForHttp } from './lib/treetop-release.mjs'
 
-const release = process.env.TREETOP_REST_VERSION ?? 'v0.0.12'
+const release = process.env.TREETOP_REST_VERSION ?? 'v0.0.16'
 const port = Number(process.env.TREETOP_E2E_PORT ?? 19998)
 const root = process.cwd()
 const binary = await ensureTreetopServer({ root, release })

@@ -399,7 +399,12 @@ export function PlaygroundPage() {
                   </article>
                 ))}
               </div>
-              <div className="snapshot-line"><span>Policy snapshot</span><code>{response.version.hash.slice(0, 12)}</code><span>{new Date(response.version.loaded_at).toLocaleString()}</span></div>
+              <div className="snapshot-line">
+                <span>Policy snapshot</span><code title={response.version.hash}>{response.version.hash.slice(0, 12)}</code>
+                <span>{new Date(response.version.loaded_at).toLocaleString()}</span>
+                {response.version.generation !== undefined && <span>Generation {response.version.generation}</span>}
+                {response.version.label_set && <><span>Label set</span><code title={response.version.label_set}>{response.version.label_set.slice(0, 12)}</code></>}
+              </div>
             </div>
           )}
           {response && <button className="button ghost rerun" onClick={() => void run()}><RotateCcw size={15} /> Run again</button>}

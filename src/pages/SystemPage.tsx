@@ -70,6 +70,8 @@ export function SystemPage({ onConfigure }: { onConfigure: () => void }) {
         <StatusCard icon={<Radio size={19} />} title="Current snapshot">
           <Row label="Policy hash" value={version?.policies.hash ? `${version.policies.hash.slice(0, 12)}…` : undefined} mono />
           <Row label="Policy loaded" value={version?.policies.loaded_at ? new Date(version.policies.loaded_at).toLocaleString() : undefined} />
+          <Row label="Policy generation" value={version?.policies.generation} />
+          <Row label="Label set" value={version?.policies.label_set} mono />
           <Row label="Schema hash" value={version?.schema?.hash ? `${version.schema.hash.slice(0, 12)}…` : 'None'} mono />
         </StatusCard>
       </div>
@@ -87,5 +89,5 @@ function StatusCard({ icon, title, children }: { icon: React.ReactNode; title: s
 }
 
 function Row({ label, value, mono }: { label: string; value?: string | number | null; mono?: boolean }) {
-  return <div><span>{label}</span><strong className={mono ? 'mono' : ''}>{value ?? '—'}</strong></div>
+  return <div><span>{label}</span><strong className={mono ? 'mono' : ''} title={mono && typeof value === 'string' ? value : undefined}>{value ?? '—'}</strong></div>
 }

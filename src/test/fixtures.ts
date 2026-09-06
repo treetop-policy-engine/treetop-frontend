@@ -67,7 +67,7 @@ export const statusResponse = {
 export const versionResponse = {
   version: '0.0.10',
   core: { version: '0.0.19', cedar: '4.12.0' },
-  policies: { hash: 'a'.repeat(64), loaded_at: '2026-08-12T12:00:00Z' },
+  policies: { hash: 'a'.repeat(64), loaded_at: '2026-08-12T12:00:00Z', generation: 7, label_set: 'b'.repeat(64) },
   schema: { hash: 'c'.repeat(64), loaded_at: '2026-08-12T12:00:00Z' },
 }
 

@@ -72,6 +72,9 @@ test('builds a schema-guided request and explains the decision', async ({ page }
 
   await expect(page.getByText('Allow', { exact: true })).toBeVisible()
   await expect(page.getByText('App.read_documents', { exact: true })).toBeVisible()
+  await expect(page.getByText('Generation 7', { exact: true })).toBeVisible()
+  await expect(page.locator('.snapshot-line').getByText('Label set', { exact: true })).toBeVisible()
+  await expect(page.locator('.snapshot-line').getByTitle('b'.repeat(64))).toBeVisible()
   await expect(page.getByText('1', { exact: true }).first()).toBeVisible()
 })
 
@@ -294,4 +297,13 @@ test('directs unauthorized users to the credential control without retaining a r
   await expect(page.getByText('invalid rejected-browser-token')).not.toBeVisible()
   await page.getByRole('button', { name: 'Configure credential' }).click()
   await expect(page.getByRole('dialog', { name: 'Treetop servers' }).getByText('Token configured.')).not.toBeVisible()
+})
+
+
+test('system view retains complete version metadata', async ({ page }) => {
+  await page.getByRole('navigation', { name: 'Primary navigation' }).getByRole('button', { name: /System/ }).click()
+  const snapshot = page.getByText('Current snapshot', { exact: true }).locator('../..')
+  await expect(snapshot.getByText('Policy generation', { exact: true })).toBeVisible()
+  await expect(snapshot.getByText('7', { exact: true })).toBeVisible()
+  await expect(snapshot.getByTitle('b'.repeat(64), { exact: true })).toHaveText('b'.repeat(64))
 })
