@@ -6,7 +6,7 @@ Switching connections does not upload data, alter a server, or combine informati
 
 ## Configure connections at startup
 
-For one server, use the backwards-compatible variables:
+For one server, use these startup variables:
 
 ```dotenv
 VITE_TREETOP_API_URL=/treetop-api
@@ -104,7 +104,7 @@ Open **Switch server** in the sidebar or **Servers** on the System page.
 
 The workbench clears the previous in-memory snapshot when it switches. It then requests status, version, and schema from the selected server. Policies and metrics are fetched by their pages as needed. Responses still in flight from an earlier server are ignored.
 
-Connection selection and browser-added profiles are stored under `treetop.serverProfiles.v1` in local storage. Existing installations using the earlier `treetop.baseUrl` key are migrated automatically. Clearing site data restores the configured default and removes browser-added entries.
+Connection selection and browser-added profiles are stored under `treetop.serverProfiles.v1` in local storage. The retired `treetop.baseUrl` key is ignored; configure or add that connection explicitly after upgrading. Clearing site data restores the configured default and removes browser-added entries.
 
 ## Failure behavior
 
