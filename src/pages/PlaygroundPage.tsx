@@ -140,7 +140,7 @@ export function PlaygroundPage() {
 
   const batchCount = built.body?.requests.length ??
     splitAlternatives(form.principalIds, form.matrix).length * splitAlternatives(form.resourceIds, form.matrix).length
-  const maxBatch = status?.request_limits?.max_batch_size
+  const maxBatch = status?.request_limits.max_batch_size
 
   async function run() {
     const sequence = ++runSequence.current
@@ -153,7 +153,7 @@ export function PlaygroundPage() {
         return built.body
       })()
       if (!Array.isArray(body.requests) || body.requests.length === 0) throw new Error('The request must contain at least one check')
-      if (maxBatch && body.requests.length > maxBatch) throw new Error(`Batch contains ${body.requests.length} checks; the server limit is ${maxBatch}`)
+      if (maxBatch !== undefined && body.requests.length > maxBatch) throw new Error(`Batch contains ${body.requests.length} checks; the server limit is ${maxBatch}`)
     } catch (cause) {
       setRunError(cause instanceof Error ? cause.message : String(cause))
       return
@@ -402,7 +402,7 @@ export function PlaygroundPage() {
               <div className="snapshot-line">
                 <span>Policy snapshot</span><code title={response.version.hash}>{response.version.hash.slice(0, 12)}</code>
                 <span>{new Date(response.version.loaded_at).toLocaleString()}</span>
-                {response.version.generation !== undefined && <span>Generation {response.version.generation}</span>}
+                {<span>Generation {response.version.generation}</span>}
                 {response.version.label_set && <><span>Label set</span><code title={response.version.label_set}>{response.version.label_set.slice(0, 12)}</code></>}
               </div>
             </div>

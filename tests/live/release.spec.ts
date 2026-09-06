@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test'
+import { REST_VERSION } from '../../scripts/lib/treetop-contract.mjs'
 
-test('evaluates a schema-guided request against the released server', async ({ page }) => {
-  const expectedVersion = (process.env.TREETOP_REST_VERSION ?? 'v0.0.16').replace(/^v/, '')
+test('evaluates a schema-guided request against the coordinated candidate', async ({ page }) => {
   await page.goto('/')
   await expect(page.getByText('Schema-backed', { exact: true })).toBeVisible()
   await expect(page.getByLabel('Action')).toHaveValue('App::Action::read')
@@ -18,7 +18,5 @@ test('evaluates a schema-guided request against the released server', async ({ p
   await expect(page.getByText('App.read_documents', { exact: true })).toBeVisible()
 
   await page.getByRole('button', { name: /System/ }).click()
-  const escapedVersion = expectedVersion.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-  await expect(page.getByText(new RegExp(`^v${escapedVersion}(?:\\+|$)`))).toBeVisible()
-  if (expectedVersion === '0.0.10') await expect(page.getByText('4.12.0', { exact: true })).toBeVisible()
+  await expect(page.getByText(REST_VERSION, { exact: true }).first()).toBeVisible()
 })

@@ -1,9 +1,7 @@
-import { createWriteStream } from 'node:fs'
 import fs from 'node:fs/promises'
-import { Readable } from 'node:stream'
-import { pipeline } from 'node:stream/promises'
 import { spawn } from 'node:child_process'
 import path from 'node:path'
+import { REST_REF } from './treetop-contract.mjs'
 
 async function exists(file) {
   try {
@@ -12,17 +10,6 @@ async function exists(file) {
   } catch {
     return false
   }
-}
-
-function releaseArchitecture() {
-  if (process.platform !== 'linux') {
-    throw new Error(
-      'Official treetop-rest binaries are Linux-only. Set TREETOP_SERVER_BIN to a locally built treetop-server, or use the Docker demo.',
-    )
-  }
-  if (process.arch === 'x64') return 'x86_64'
-  if (process.arch === 'arm64') return 'aarch64'
-  throw new Error(`Unsupported release architecture: ${process.arch}`)
 }
 
 export function run(command, args, options = {}) {
@@ -36,34 +23,29 @@ export function run(command, args, options = {}) {
   })
 }
 
-export async function ensureTreetopServer({ root = process.cwd(), release = 'v0.0.16' } = {}) {
+export async function ensureTreetopServer({ root = process.cwd() } = {}) {
   const override = process.env.TREETOP_SERVER_BIN
   if (override) {
     const resolved = path.resolve(root, override)
     await fs.access(resolved)
     return resolved
   }
-  if (!/^v[0-9A-Za-z._-]+$/.test(release)) throw new Error(`Invalid release name: ${release}`)
-
-  const cacheDir = path.join(root, '.cache', 'treetop-rest', release)
-  const binary = path.join(cacheDir, 'treetop-server')
-  const archive = path.join(cacheDir, 'treetop-server.tar.gz')
+  const cacheDir = path.join(root, '.cache', 'treetop-rest', REST_REF)
+  const source = path.join(cacheDir, 'source')
+  const target = path.join(cacheDir, 'target')
+  const binary = path.join(target, 'release', process.platform === 'win32' ? 'treetop-server.exe' : 'treetop-server')
   if (await exists(binary)) return binary
-
-  await fs.mkdir(cacheDir, { recursive: true })
-  if (!(await exists(archive))) {
-    const arch = releaseArchitecture()
-    const url = `https://github.com/treetop-policy-engine/treetop-rest/releases/download/${release}/treetop-server-${arch}-linux-musl.tar.gz`
-    console.log(`Downloading treetop-rest ${release} (${arch})…`)
-    const response = await fetch(url, { redirect: 'follow' })
-    if (!response.ok || !response.body) {
-      throw new Error(`Download failed: ${response.status} ${response.statusText}`)
-    }
-    await pipeline(Readable.fromWeb(response.body), createWriteStream(archive))
+  await fs.mkdir(source, { recursive: true })
+  if (!(await exists(path.join(source, '.git')))) {
+    await run('git', ['init', source])
+    await run('git', ['-C', source, 'remote', 'add', 'origin', 'https://github.com/treetop-policy-engine/treetop-rest.git'])
   }
-
-  await run('tar', ['-xzf', archive, '-C', cacheDir])
-  await fs.chmod(binary, 0o755)
+  await run('git', ['-C', source, 'fetch', '--depth=1', 'origin', REST_REF])
+  await run('git', ['-C', source, 'checkout', '--detach', REST_REF])
+  await run('cargo', ['build', '--locked', '--release', '--bin', 'treetop-server'], {
+    cwd: source,
+    env: { ...process.env, CARGO_TARGET_DIR: target },
+  })
   return binary
 }
 

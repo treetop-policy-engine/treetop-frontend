@@ -1,4 +1,5 @@
 import type { components } from './generated'
+import { validateAuthorization, validateStatus, validateVersion } from './validation'
 
 export type ApiSchema = components['schemas']
 export type StatusResponse = ApiSchema['StatusResponse']
@@ -15,17 +16,18 @@ export type PermitPolicy = ApiSchema['PermitPolicy']
 export type AuthorizeDecision = {
   decision: 'Allow' | 'Deny'
   version: PolicyVersion
-  policy_id?: string
-  policy?: PermitPolicy[]
-}
+} & (
+  | { policy_id: string; policy?: never }
+  | { policy: PermitPolicy[]; policy_id?: never }
+)
 
 export type AuthorizeResult = {
   index: number
   id?: string | null
-  status: 'success' | 'failed'
-  result?: AuthorizeDecision
-  error?: string
-}
+} & (
+  | { status: 'success'; result: AuthorizeDecision; error?: never }
+  | { status: 'failed'; error: string; result?: never }
+)
 
 export type AuthorizeResponse = {
   results: AuthorizeResult[]
@@ -140,12 +142,12 @@ export class TreetopClient {
     return response.text() as Promise<T>
   }
 
-  status() {
-    return this.request<StatusResponse>('/api/v1/status')
+  async status() {
+    return validateStatus(await this.request<unknown>('/api/v1/status'))
   }
 
-  version() {
-    return this.request<VersionInfo>('/api/v1/version')
+  async version() {
+    return validateVersion(await this.request<unknown>('/api/v1/version'))
   }
 
   schema() {
@@ -156,12 +158,13 @@ export class TreetopClient {
     return this.request<PoliciesDownload>('/api/v1/policies')
   }
 
-  authorize(body: AuthorizeRequest, detail: 'brief' | 'full' = 'full') {
-    return this.request<AuthorizeResponse>(`/api/v1/authorize?detail=${detail}`, {
+  async authorize(body: AuthorizeRequest, detail: 'brief' | 'full' = 'full') {
+    const response = await this.request<unknown>(`/api/v1/authorize?detail=${detail}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     })
+    return validateAuthorization(response, body, detail)
   }
 
   userPolicies(user: string, namespaces: string[] = [], groups: string[] = []) {

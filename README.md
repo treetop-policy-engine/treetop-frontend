@@ -72,7 +72,7 @@ The Metrics page fetches the Prometheus endpoint when opened and visualizes requ
 
 ## Demo environments
 
-Start the released server and frontend together with one of the bundled Cedar environments:
+Start the candidate server and frontend together with one of the bundled Cedar environments:
 
 ```bash
 npm run demo:list
@@ -82,11 +82,11 @@ npm run demo -- change-control
 npm run demo -- schema-free
 ```
 
-The first run downloads and caches the official v0.0.16 Linux server binary. Schema-backed environments use typed guided forms; the schema-free environment infers its basic choices from policy scopes. Each includes suggested allow/deny requests. See [Demo environments](demo/README.md) for provenance, Docker startup, port overrides, and adding environments.
+The first run builds and caches the exact REST source candidate with Cargo. Schema-backed environments use typed guided forms; the schema-free environment infers its basic choices from policy scopes. Each includes suggested allow/deny requests. See [Demo environments](demo/README.md) for provenance, Docker startup, port overrides, and adding environments.
 
 ## API contract
 
-The checked-in TypeScript contract targets the `treetop-rest` v0.0.16 OpenAPI document, including its authorization batch-size metrics:
+The checked-in TypeScript contract targets the `treetop-rest` 0.1.0 candidate OpenAPI document, including its authorization batch-size metrics:
 
 ```bash
 npm run api:generate
@@ -99,7 +99,7 @@ TREETOP_REST_REF=main npm run api:generate
 TREETOP_OPENAPI_URL=http://127.0.0.1:9999/openapi.json npm run api:generate
 ```
 
-`npm run api:check` regenerates the v0.0.16 contract and fails if the checked-in client has drifted.
+`npm run api:check` regenerates the 0.1.0 candidate contract and fails if the checked-in client has drifted.
 
 ## Tests
 
@@ -114,8 +114,8 @@ npm run test:demos
 ```
 
 - `test:e2e` runs browser scenarios with a mocked REST boundary, including server-profile persistence and switching.
-- `test:e2e:live` downloads the official Linux v0.0.16 server, loads real Cedar policy/schema fixtures with both upload and Bearer credentials, and runs the primary authorization flow through Vite's same-origin proxy. Set `TREETOP_REST_VERSION` to exercise another release or `TREETOP_SERVER_BIN` to use a local build.
-- `test:demos` validates every advertised demo decision and principal lookup against the released server.
+- `test:e2e:live` builds the pinned REST source candidate, loads real Cedar policy/schema fixtures with both upload and Bearer credentials, and runs the primary authorization flow through Vite's same-origin proxy. Set `TREETOP_SERVER_BIN` to use an explicitly built local candidate.
+- `test:demos` validates every advertised demo decision and principal lookup against the candidate server.
 
 ## Releases
 

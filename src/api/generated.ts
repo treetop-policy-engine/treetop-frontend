@@ -1,5 +1,5 @@
 /**
- * Generated from the treetop-rest v0.0.16 OpenAPI contract.
+ * Generated from the treetop-rest fce2e1fa8f44244c201dd87731ba63e5f203a8e0 OpenAPI contract.
  * Do not edit by hand; run npm run api:generate.
  */
 export interface paths {
@@ -29,22 +29,6 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["upload_bundle"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/health": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["health"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -334,7 +318,6 @@ export interface components {
         Group: components["schemas"]["QualifiedId"];
         /** @description A collection of Group entries. */
         Groups: components["schemas"]["Group"][];
-        HealthOK: Record<string, never>;
         /** @description A single result from a batch operation with its original index and optional client ID */
         IndexedResult_AuthorizeDecisionBrief: components["schemas"]["BatchResult_AuthorizeDecisionBrief"] & {
             /** @description Client-provided identifier for this request (if provided) */
@@ -426,10 +409,10 @@ export interface components {
              * Format: int64
              * @description Monotonic generation within this engine instance.
              */
-            generation?: number;
+            generation: number;
             /** @description Hash of the policy source (e.g. SHA-256 of the policy text). */
             hash: string;
-            label_set?: null | components["schemas"]["LabelSetVersion"];
+            label_set: null | components["schemas"]["LabelSetVersion"];
             /** @description When this policy set was loaded into the engine. */
             loaded_at: string;
         };
@@ -458,7 +441,7 @@ export interface components {
             supported: boolean;
         };
         RequestLimits: {
-            max_batch_size?: number | null;
+            max_batch_size: number;
             max_context_bytes: number;
             max_context_depth: number;
             max_context_keys: number;
@@ -489,8 +472,8 @@ export interface components {
         StatusResponse: {
             parallel_configuration: components["schemas"]["ParallelConfig"];
             policy_configuration: components["schemas"]["PoliciesMetadata"];
-            request_context?: components["schemas"]["RequestContextStatus"];
-            request_limits?: components["schemas"]["RequestLimits"];
+            request_context: components["schemas"]["RequestContextStatus"];
+            request_limits: components["schemas"]["RequestLimits"];
         };
         Upload: {
             policies: string;
@@ -659,46 +642,6 @@ export interface operations {
             };
             /** @description Internal server error */
             500: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-        };
-    };
-    health: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Process is live (legacy endpoint) */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["HealthOK"];
-                };
-            };
-            /** @description Missing, malformed, or invalid Bearer token */
-            401: {
-                headers: {
-                    /** @description Bearer authentication challenge */
-                    "WWW-Authenticate"?: string;
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ErrorResponse"];
-                };
-            };
-            /** @description Client IP is not allowed or cannot be resolved */
-            403: {
                 headers: {
                     [name: string]: unknown;
                 };

@@ -1,7 +1,7 @@
 {
   "name": "treetop-frontend",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,8 +17,7 @@
     "test:demos": "node scripts/test-demo-environments.mjs",
     "test:e2e:install": "PLAYWRIGHT_BROWSERS_PATH=0 playwright install chromium",
     "api:generate": "node scripts/generate-api.mjs",
-    "api:generate:v0.0.16": "TREETOP_REST_REF=v0.0.16 node scripts/generate-api.mjs",
-    "api:check": "npm run api:generate:v0.0.16 && git diff --exit-code -- src/api/generated.ts"
+    "api:check": "npm run api:generate && git diff --exit-code -- src/api/generated.ts"
   },
   "dependencies": {
     "lucide-react": "^1.31.0",
