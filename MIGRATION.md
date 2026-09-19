@@ -49,3 +49,8 @@ old release-download selection is removed. `TREETOP_SERVER_BIN` accepts an expli
 local executable. The Docker demo builds the same revision. Source builds require
 Git and Rust. The pinned commit belongs to REST 0.1.0 and uses published Core and
 Bundle packages. Release those prerequisites before the frontend.
+
+## Dependency refresh
+
+Use Node.js 22.22.2+, 24.15.0+, or 26+ before running `npm ci`. The updated
+Vitest and jsdom releases do not support odd-numbered Node.js 23 or 25.
