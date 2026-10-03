@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-10-03
+
 ### Changed
+
+- Refresh compatible frontend dependencies and Action pins, including Vite 8.3.2,
+  Vitest 5.0.3, ESLint 10.12.0, and current icon, DOM, and TypeScript lint tooling.
+  Keep TypeScript 5.9 for the API generator's declared peer dependency.
 
 - Pin API generation, live/demo verification, and Docker demos to the REST
   revision using Core/Bundle 0.3.0 and Utoipa 6. Regenerate TypeScript declarations

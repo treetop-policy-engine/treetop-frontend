@@ -1,10 +1,23 @@
-# Breaking frontend 0.1.0 migration
+# Migration guide
+
+## Frontend 0.2.0 with REST 0.2.0
+
+Use Node.js 22.22.2+, 24.15.0+, or 26+ before running `npm ci`; Node.js 23
+and 25 are unsupported by the updated tooling. API generation, live tests, and
+demos use the immutable REST 0.2.0 release commit with Core and Bundle 0.3.0.
+Browser profiles and the strict authorization JSON contract are unchanged.
+
+Rebuild and re-sign policy archives with Bundle CLI 0.3.0 (or Bundle Action v3)
+before upgrading the server. Existing archives from older generator versions
+are rejected even when their source manifests use format 2.
+
+## Breaking frontend 0.1.0 migration
 
 Upgrade the workbench and REST to the coordinated 0.1.0 contract. Early releases
 prioritize correctness over compatibility. The generated API comes from the
 immutable REST revision in `scripts/lib/treetop-contract.mjs`.
 
-## Declared targets
+### Declared targets
 
 Label rules now declare one exact resource type and attribute:
 
@@ -26,7 +39,7 @@ Migrate bundle/module manifests to format 2, rebuild archives, and re-sign.
 All included demos use the new syntax and verify their advertised decisions
 against the same released server revision.
 
-## Current metadata and responses
+### Current metadata and responses
 
 The UI requires complete status capabilities and policy versions with `hash`,
 `loaded_at`, nullable `label_set`, and `generation`. Missing batch limits no longer
@@ -42,7 +55,7 @@ The retired `treetop.baseUrl` storage key is ignored. Configure current server
 profiles again if you previously used only that key. Current stored profiles are
 unchanged.
 
-## Reproducible builds
+### Reproducible builds
 
 Demo and live-test scripts build the exact source revision with `cargo --locked`;
 old release-download selection is removed. `TREETOP_SERVER_BIN` accepts an explicit
@@ -50,12 +63,12 @@ local executable. The Docker demo builds the same revision. Source builds requir
 Git and Rust. The pinned REST revision uses published Core and Bundle 0.3.0
 crates with registry checksums in both lockfiles.
 
-## Dependency refresh
+### Dependency refresh
 
 Use Node.js 22.22.2+, 24.15.0+, or 26+ before running `npm ci`. The updated
 Vitest and jsdom releases do not support odd-numbered Node.js 23 or 25.
 
-## Core 0.3.0 contract refresh
+### Core 0.3.0 contract refresh
 
 API generation, live tests, demos, and the Docker demo now share the immutable
 REST revision using Core/Bundle 0.3.0 and Utoipa 6. Generated types reflect the
