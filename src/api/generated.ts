@@ -1,5 +1,5 @@
 /**
- * Generated from the treetop-rest a8356004af9970062eb8535364d4d53a6859cf9d OpenAPI contract.
+ * Generated from the treetop-rest 1d130e4829405cef0b827aab1ecc02e7b4723190 OpenAPI contract.
  * Do not edit by hand; run npm run api:generate.
  */
 export interface paths {
@@ -287,7 +287,7 @@ export interface components {
             refresh_frequency?: number | null;
             signed: boolean;
             signing_key_id?: string | null;
-            source?: null | components["schemas"]["Endpoint"];
+            source?: components["schemas"]["Endpoint"] | null;
         };
         /** @description An IP address or network accepted by Cedar's `ip()` extension. */
         CedarIp: string;
@@ -311,7 +311,7 @@ export interface components {
         };
         ErrorResponse: {
             code: string;
-            details?: null | components["schemas"]["ErrorDetails"];
+            details?: components["schemas"]["ErrorDetails"] | null;
             error: string;
         };
         /** @description A group identifier (e.g. Group::"devs"). */
@@ -340,7 +340,7 @@ export interface components {
             refresh_frequency?: number | null;
             sha256: string;
             size: number;
-            source?: null | components["schemas"]["Endpoint"];
+            source?: components["schemas"]["Endpoint"] | null;
             /** Format: date-time */
             timestamp: string;
         };
@@ -351,7 +351,7 @@ export interface components {
             refresh_frequency?: number | null;
             sha256: string;
             size: number;
-            source?: null | components["schemas"]["Endpoint"];
+            source?: components["schemas"]["Endpoint"] | null;
             /** Format: date-time */
             timestamp: string;
         };
@@ -362,7 +362,7 @@ export interface components {
             refresh_frequency?: number | null;
             sha256: string;
             size: number;
-            source?: null | components["schemas"]["Endpoint"];
+            source?: components["schemas"]["Endpoint"] | null;
             /** Format: date-time */
             timestamp: string;
         };
@@ -377,6 +377,12 @@ export interface components {
         PermitPolicy: {
             annotation_id?: string | null;
             cedar_id: string;
+            /**
+             * @description Shared immutable Cedar JSON, compacted when this metadata is constructed.
+             *
+             *     Serialize directly without reconstructing a JSON tree. Use
+             *     [`PolicyJson::to_value`] for an owned, mutable copy.
+             */
             json: unknown;
             literal: string;
         };
@@ -387,7 +393,7 @@ export interface components {
         /** @description Metadata about the policies and labels in the policy store */
         PoliciesMetadata: {
             allow_upload: boolean;
-            bundle?: null | components["schemas"]["BundleMetadata"];
+            bundle?: components["schemas"]["BundleMetadata"] | null;
             labels: components["schemas"]["Metadata_OfLabels"];
             policies: components["schemas"]["Metadata_OfPolicies"];
             schema: components["schemas"]["Metadata_OfSchema"];
@@ -412,7 +418,7 @@ export interface components {
             generation: number;
             /** @description Hash of the policy source (e.g. SHA-256 of the policy text). */
             hash: string;
-            label_set: null | components["schemas"]["LabelSetVersion"];
+            label_set: components["schemas"]["LabelSetVersion"] | null;
             /** @description When this policy set was loaded into the engine. */
             loaded_at: string;
         };
@@ -436,7 +442,7 @@ export interface components {
         /** @enum {string} */
         RequestContextFallbackReason: "no_schema" | "schema_incompatible";
         RequestContextStatus: {
-            fallback_reason?: null | components["schemas"]["RequestContextFallbackReason"];
+            fallback_reason?: components["schemas"]["RequestContextFallbackReason"] | null;
             schema_backed: boolean;
             supported: boolean;
         };
@@ -491,7 +497,7 @@ export interface components {
         VersionInfo: {
             core: components["schemas"]["Core"];
             policies: components["schemas"]["PolicyVersion"];
-            schema?: null | components["schemas"]["SchemaVersionInfo"];
+            schema?: components["schemas"]["SchemaVersionInfo"] | null;
             version: string;
         };
     };

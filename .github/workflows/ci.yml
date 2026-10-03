@@ -19,7 +19,7 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Verify 0.1.0 release OpenAPI contract
+      - name: Verify pinned REST OpenAPI contract
         run: npm run api:check
       - run: npm run lint
       - run: npm test
@@ -40,9 +40,9 @@ jobs:
         with:
           toolchain: stable
       - run: npm run test:e2e
-      - name: Test against treetop-rest 0.1.0 release
+      - name: Test against the pinned REST candidate
         run: npm run test:e2e:live
-      - name: Validate demo environments against treetop-rest 0.1.0 release
+      - name: Validate demo environments against the pinned REST candidate
         run: npm run test:demos
 
   container:

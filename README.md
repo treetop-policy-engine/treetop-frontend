@@ -82,11 +82,11 @@ npm run demo -- change-control
 npm run demo -- schema-free
 ```
 
-The first run builds and caches the exact REST release source with Cargo. Schema-backed environments use typed guided forms; the schema-free environment infers its basic choices from policy scopes. Each includes suggested allow/deny requests. See [Demo environments](demo/README.md) for provenance, Docker startup, port overrides, and adding environments.
+The first run builds and caches the exact pinned REST source with Cargo. Schema-backed environments use typed guided forms; the schema-free environment infers its basic choices from policy scopes. Each includes suggested allow/deny requests. See [Demo environments](demo/README.md) for provenance, Docker startup, port overrides, and adding environments.
 
 ## API contract
 
-The checked-in TypeScript contract targets the `treetop-rest` 0.1.0 release OpenAPI document, including its authorization batch-size metrics:
+The checked-in TypeScript contract targets the immutable `treetop-rest` candidate using Core/Bundle 0.3.0 and Utoipa 6, including its authorization batch-size metrics:
 
 ```bash
 npm run api:generate
@@ -99,7 +99,7 @@ TREETOP_REST_REF=main npm run api:generate
 TREETOP_OPENAPI_URL=http://127.0.0.1:9999/openapi.json npm run api:generate
 ```
 
-`npm run api:check` regenerates the 0.1.0 release contract and fails if the checked-in client has drifted.
+`npm run api:check` regenerates the pinned REST contract and fails if the checked-in client has drifted.
 
 ## Tests
 
