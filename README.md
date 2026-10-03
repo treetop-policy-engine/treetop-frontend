@@ -86,7 +86,7 @@ The first run builds and caches the exact pinned REST source with Cargo. Schema-
 
 ## API contract
 
-The checked-in TypeScript contract targets the immutable `treetop-rest` candidate using Core/Bundle 0.3.0 and Utoipa 6, including its authorization batch-size metrics:
+The checked-in TypeScript contract targets the immutable `treetop-rest` revision using Core/Bundle 0.3.0 and Utoipa 6, including its authorization batch-size metrics:
 
 ```bash
 npm run api:generate

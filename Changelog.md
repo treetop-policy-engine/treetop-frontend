@@ -5,10 +5,10 @@
 ### Changed
 
 - Pin API generation, live/demo verification, and Docker demos to the REST
-  candidate using Core/Bundle 0.3.0 and Utoipa 6. Regenerate TypeScript declarations
+  revision using Core/Bundle 0.3.0 and Utoipa 6. Regenerate TypeScript declarations
   from that exact OpenAPI document. Authorization JSON and strict response
   validation are unchanged; archive users must rebuild and re-sign with Bundle
-  CLI 0.3.0. See [MIGRATION.md](MIGRATION.md) for release prerequisites.
+  CLI 0.3.0. See [MIGRATION.md](MIGRATION.md) for archive migration guidance.
 
 - Update React to 19.3, Vite to 8.3, Vitest to 5, jsdom to 30, Playwright to
   1.63, and the remaining supported runtime and development dependencies.

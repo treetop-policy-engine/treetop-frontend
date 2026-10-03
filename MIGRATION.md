@@ -47,9 +47,8 @@ unchanged.
 Demo and live-test scripts build the exact source revision with `cargo --locked`;
 old release-download selection is removed. `TREETOP_SERVER_BIN` accepts an explicit
 local executable. The Docker demo builds the same revision. Source builds require
-Git and Rust. The current pinned REST candidate uses published Core 0.3.0 and
-an exact Bundle 0.3.0 Git revision. Publish Bundle, finalize REST's registry pin,
-and update the frontend pin to that reviewed REST revision before release.
+Git and Rust. The pinned REST revision uses published Core and Bundle 0.3.0
+crates with registry checksums in both lockfiles.
 
 ## Dependency refresh
 
@@ -59,7 +58,7 @@ Vitest and jsdom releases do not support odd-numbered Node.js 23 or 25.
 ## Core 0.3.0 contract refresh
 
 API generation, live tests, demos, and the Docker demo now share the immutable
-REST candidate using Core/Bundle 0.3.0 and Utoipa 6. Generated types reflect the
+REST revision using Core/Bundle 0.3.0 and Utoipa 6. Generated types reflect the
 new OpenAPI descriptions and nullable-reference ordering; authorization JSON,
 profile storage, and response validation retain the existing strict contract.
 Rebuild and re-sign archives with Bundle CLI 0.3.0 before deploying that server.

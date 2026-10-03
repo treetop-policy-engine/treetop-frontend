@@ -1,5 +1,5 @@
 /**
- * Generated from the treetop-rest 1d130e4829405cef0b827aab1ecc02e7b4723190 OpenAPI contract.
+ * Generated from the treetop-rest a39da3952bf32ecbaab84dea4fe3e4471ca033fb OpenAPI contract.
  * Do not edit by hand; run npm run api:generate.
  */
 export interface paths {

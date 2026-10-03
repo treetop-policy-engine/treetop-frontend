@@ -40,9 +40,9 @@ jobs:
         with:
           toolchain: stable
       - run: npm run test:e2e
-      - name: Test against the pinned REST candidate
+      - name: Test against the pinned REST revision
         run: npm run test:e2e:live
-      - name: Validate demo environments against the pinned REST candidate
+      - name: Validate demo environments against the pinned REST revision
         run: npm run test:demos
 
   container:

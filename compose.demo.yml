@@ -15,7 +15,7 @@ services:
 
   server:
     build:
-      context: https://github.com/treetop-policy-engine/treetop-rest.git#1d130e4829405cef0b827aab1ecc02e7b4723190
+      context: https://github.com/treetop-policy-engine/treetop-rest.git#a39da3952bf32ecbaab84dea4fe3e4471ca033fb
     depends_on:
       fixtures:
         condition: service_healthy
