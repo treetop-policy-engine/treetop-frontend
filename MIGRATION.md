@@ -2,7 +2,7 @@
 
 Upgrade the workbench and REST to the coordinated 0.1.0 contract. Early releases
 prioritize correctness over compatibility. The generated API comes from the
-immutable REST release revision in `scripts/lib/treetop-contract.mjs`.
+immutable REST revision in `scripts/lib/treetop-contract.mjs`.
 
 ## Declared targets
 
@@ -47,10 +47,18 @@ unchanged.
 Demo and live-test scripts build the exact source revision with `cargo --locked`;
 old release-download selection is removed. `TREETOP_SERVER_BIN` accepts an explicit
 local executable. The Docker demo builds the same revision. Source builds require
-Git and Rust. The pinned commit belongs to REST 0.1.0 and uses published Core and
-Bundle packages. Release those prerequisites before the frontend.
+Git and Rust. The pinned REST revision uses published Core and Bundle 0.3.0
+crates with registry checksums in both lockfiles.
 
 ## Dependency refresh
 
 Use Node.js 22.22.2+, 24.15.0+, or 26+ before running `npm ci`. The updated
 Vitest and jsdom releases do not support odd-numbered Node.js 23 or 25.
+
+## Core 0.3.0 contract refresh
+
+API generation, live tests, demos, and the Docker demo now share the immutable
+REST revision using Core/Bundle 0.3.0 and Utoipa 6. Generated types reflect the
+new OpenAPI descriptions and nullable-reference ordering; authorization JSON,
+profile storage, and response validation retain the existing strict contract.
+Rebuild and re-sign archives with Bundle CLI 0.3.0 before deploying that server.
