@@ -1,4 +1,4 @@
-FROM node:24-alpine AS build
+FROM node:24.22.3-alpine AS build
 
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -6,7 +6,7 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:stable-alpine-slim AS runtime
+FROM nginx:1.30.7-alpine-slim AS runtime
 
 ARG VERSION=dev
 ARG REVISION=unknown
