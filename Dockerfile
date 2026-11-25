@@ -6,7 +6,7 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
-FROM nginx:1.30.7-alpine-slim AS runtime
+FROM nginx:1.30.8-alpine-slim AS runtime
 
 ARG VERSION=dev
 ARG REVISION=unknown
