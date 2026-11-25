@@ -1,5 +1,11 @@
 # Migration guide
 
+## Frontend 0.2.1 with REST 0.3.0
+
+Rebuild the workbench using the REST 0.3.0 OpenAPI description. API generation,
+live tests, and demo environments pin the signed server release commit.
+Rebuild and re-sign policy archives with Bundle CLI 0.4.0 before upgrading REST.
+
 ## Frontend 0.2.0 with REST 0.2.0
 
 Use Node.js 22.22.2+, 24.15.0+, or 26+ before running `npm ci`; Node.js 23
