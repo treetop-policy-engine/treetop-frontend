@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Security
+
+- Update the runtime image to nginx 1.30.8, which fixes CVE-2026-132779 for configurations using TLS early data.
+
 ## [0.2.0] - 2026-10-03
 
 ### Changed
