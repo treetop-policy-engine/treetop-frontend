@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+## [0.2.1] - 2026-11-25
+
+### Changed
+
+- Exclude the downloaded REST checkout from frontend lint after running live tests.
+
+- Generate the API and verify demos against the REST 0.3.0 release commit
+  with Core and Bundle 0.4.0.
+
 ### Security
 
 - Update the runtime image to nginx 1.30.8, which fixes CVE-2026-132779 for configurations using TLS early data.
